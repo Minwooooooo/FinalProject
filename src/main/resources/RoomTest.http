@@ -1,0 +1,16 @@
+### CreatRoom
+POST http://localhost:8080/auth/chat/room
+Content-Type: application/json
+accept: */*
+
+{
+  "roomName" : "스터티방",
+  "category" : "생활영어" ,
+  "memberCount" : "6",
+  "lock": false,
+  "roomPw" : ""
+}
+
+
+### ListRoom
+GET http://localhost:8080/auth/chat/rooms
