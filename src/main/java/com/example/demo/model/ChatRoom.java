@@ -1,24 +1,59 @@
 package com.example.demo.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.example.demo.dto.requestDto.CreatRoomRequestDto;
+import lombok.*;
+import org.hibernate.cfg.annotations.Nullability;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 
+
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class ChatRoom implements Serializable {
 
     private static final long serialVersionUID = 6494678977089006639L;
 
+    @Id
     private String roomId;
-    private String name;
 
-    public static ChatRoom create(String name) {
+    @Column
+    private String roomName;
+
+    @Column
+    private String category;
+
+    @Column
+    private long maxEnterMember;
+
+    @Column
+    private Long memberCount;
+
+    @Column
+    private boolean lock;
+
+    @Column
+    private String roomPw;
+
+
+    public static ChatRoom create(CreatRoomRequestDto creatRoomRequestDto) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = name;
+        chatRoom.roomName = creatRoomRequestDto.getRoomName();
+        chatRoom.category = creatRoomRequestDto.getCategory();
+        chatRoom.maxEnterMember = creatRoomRequestDto.getMaxEnterMember();
+        chatRoom.memberCount = 0L;
+        chatRoom.lock = creatRoomRequestDto.isLock();
+        chatRoom.roomPw = creatRoomRequestDto.getRoomPw();
         return chatRoom;
+    }
+
+    public enum categoryList{
+        생활영어, 캠스터디, 시험대비, 스크립트
     }
 }
