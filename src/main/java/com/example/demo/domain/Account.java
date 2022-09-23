@@ -1,6 +1,8 @@
 package com.example.demo.domain;
 
+import com.example.demo.dto.request.AccountRequestDto;
 import com.sun.istack.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,5 +28,17 @@ public class Account {
     @NotNull
     private String email;
 
+    public Account(AccountRequestDto requestDto){
+        this.kakaoId= requestDto.getKakaoId();
+        this.email= requestDto.getEmail();
+    }
 
+
+
+
+//    For Test
+    public Account(Long kakaoId, String email) {
+        this.kakaoId = kakaoId;
+        this.email = email;
+    }
 }
