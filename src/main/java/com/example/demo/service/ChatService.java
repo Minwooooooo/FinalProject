@@ -6,15 +6,17 @@ import com.example.demo.repo.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class ChatService {
 
-    private final ChannelTopic channelTopic;
-    private final RedisTemplate redisTemplate;
+    // private final ChannelTopic channelTopic;
+    // private final RedisTemplate redisTemplate;
     private final ChatRoomRepository chatRoomRepository;
+    private final SimpMessageSendingOperations messageSendingOperations;
 
     /**
      * destination정보에서 roomId 추출
@@ -39,7 +41,8 @@ public class ChatService {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
-        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
+        // redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
+        messageSendingOperations.convertAndSend("/sub/chat/room/"+chatMessage.getRoomId(),chatMessage.getMessage());
     }
 
 }

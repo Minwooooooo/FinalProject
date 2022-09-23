@@ -31,6 +31,7 @@ public class ChatController {
         // 채팅방 인원수 세팅
         message.setUserCount(chatRoomRepository.getUserCount(message.getRoomId()));
         // Websocket에 발행된 메시지를 redis로 발행(publish)
+        // 임시로 redis 없이 발행
         chatService.sendChatMessage(message);
     }
 }
