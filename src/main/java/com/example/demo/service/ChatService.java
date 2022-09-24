@@ -2,10 +2,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.model.ChatMessage;
-import com.example.demo.repo.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChatService {
 
-    // private final ChannelTopic channelTopic;
-    // private final RedisTemplate redisTemplate;
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomService chatRoomService;
     private final SimpMessageSendingOperations messageSendingOperations;
 
     /**
@@ -33,7 +28,7 @@ public class ChatService {
      * 채팅방에 메시지 발송
      */
     public void sendChatMessage(ChatMessage chatMessage) {
-        chatMessage.setUserCount(chatRoomRepository.getUserCount(chatMessage.getRoomId()));
+        chatMessage.setUserCount(chatRoomService.getUserCount(chatMessage.getRoomId()));
         if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
             chatMessage.setSender("[알림]");
@@ -41,7 +36,7 @@ public class ChatService {
             chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
             chatMessage.setSender("[알림]");
         }
-        // redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
+
         messageSendingOperations.convertAndSend("/sub/chat/room/"+chatMessage.getRoomId(),chatMessage.getMessage());
     }
 
