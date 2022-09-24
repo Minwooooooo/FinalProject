@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.Entity.Member;
+import com.example.demo.entity.Member;
 import com.example.demo.repository.MemberRepository;
 
 
