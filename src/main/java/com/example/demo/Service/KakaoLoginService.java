@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.Entity.Member;
-import com.example.demo.Repository.MemberRepository;
+import com.example.demo.repository.MemberRepository;
 
 
-import com.example.demo.Security.Jwt.JwtTokenProvider;
+import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.dto.responseDto.ResponseDto;
 import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
