@@ -17,7 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  * Web Security 설정
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandlerException accessDeniedHandlerException;
@@ -47,7 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+
+            .and()
+                .apply(new JwtSecurityConfiguration(jwtTokenProvider));
 
 
     }

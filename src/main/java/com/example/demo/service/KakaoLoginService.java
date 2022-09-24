@@ -56,6 +56,7 @@ public class KakaoLoginService {
         return ResponseDto.success(member.getMemberName()+"님 로그인 성공");
     }
     // KakaoToken 받기
+    // Kakao developer의 예제를 기반으로 CURL to JAVA 컨버터를 통해서 작성
     public String getKakaoToken(String code) throws IOException{
         //Kakao에서 Token 발급 받는 URL
         URL url = new URL("https://kauth.kakao.com/oauth/token");
@@ -80,6 +81,7 @@ public class KakaoLoginService {
                 : httpConn.getErrorStream();
         Scanner s = new Scanner(responseStream).useDelimiter("\\A");
         String response = s.hasNext() ? s.next() : "";
+
         // response->Object
         Gson gson = new Gson();
         Map map = new HashMap();
@@ -102,35 +104,50 @@ public class KakaoLoginService {
                 : httpConn2.getErrorStream();
         Scanner sc = new Scanner(responseStream2).useDelimiter("\\A");
         String response = sc.hasNext() ? sc.next() : "";
-        // response(String)->Object
+
+        // response->Object
+        // getKakaoToken()과 같이 Gson을 사용시 숫자를 자동으로 Int형으로 받는다
+        // 그런데 Kakao ID는 10자리 숫자로 Long이 아닌 Int형으로 받을 시 오류가 발생
+        // -> Gson 라이브러리 내 JsonParser를 이용하여 해결
         JsonParser jsonParser = new JsonParser();
         Object obj = jsonParser.parse(response);
         JsonObject info = (JsonObject) obj;
         return info;
     }
 
-    // 유저 확인
+    // 유저 기존 가입여부 확인
     public boolean chekExistMember(JsonObject info){
-        System.out.println(info.get("id").toString());
         if(memberRepository.existsById(Long.valueOf(info.get("id").toString()))){
             return true;
         }
         return false;
     }
 
+
+    // 회원가입 (신규유저만 해당)
     @Transactional
     public void signIn(JsonObject memberInfo){
+        // Kakao의 경우 이중 객체형태의 정보를 제공하므로 key값이 properties인 Value를 객체로 변환
         JsonParser jsonParser = new JsonParser();
         Object obj = jsonParser.parse(memberInfo.get("properties").toString());
         JsonObject properties = (JsonObject) obj;
+
+
+        // 프로필 사진이 없을시 들어오는 URL 체크 필요
         String defaultImg = "사진이 없당";
         String profileImage=defaultImg;
         if(properties.get("profile_image")!=null){
-            profileImage=properties.get("profile_image").toString();
+            String temp_profileImage=properties.get("profile_image").toString();
+            profileImage=temp_profileImage.substring(1,temp_profileImage.length()-1);
         }
+        // 이름이랑 이메일이 ""로 묶이는 오류 수정
+        String temp_name=properties.get("nickname").toString();
+
+        // 신규 회원가입 빌드
+        // 권한은 기본값인 USER
         Member member = Member.builder()
                 .id(Long.valueOf(memberInfo.get("id").toString()))
-                .memberName(properties.get("nickname").toString())
+                .memberName(temp_name.substring(1,temp_name.length()-1))
                 .profileImage(profileImage)
                 .userRole(Member.Authority.ROLE_USER)
                 .build();

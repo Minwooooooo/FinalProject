@@ -28,10 +28,6 @@ public class JwtCustomFilter extends OncePerRequestFilter {
     private static final Logger logger= LoggerFactory.getLogger(JwtCustomFilter.class);
     private final JwtTokenProvider jwtTokenProvider;
 
-
-
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -60,7 +56,7 @@ public class JwtCustomFilter extends OncePerRequestFilter {
             // 저장 후 SecurityContextHolder에 담긴 권한
             Authentication temp_auth2=SecurityContextHolder.getContext().getAuthentication();
 
-            // System.out.println(temp_auth1+" --필터적용-> "+temp_auth2);
+            System.out.println(temp_auth1+" --필터적용-> "+temp_auth2);
 
             logger.debug("SecurityContextHolder에 '{}' 인증정보를 저장했습니다, uri: {}",userAuth.getName(),request.getRequestURI());
         }
