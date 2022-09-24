@@ -1,8 +1,8 @@
-package com.example.demo.Security;
+package com.example.demo.security;
 
 
 import com.example.demo.Entity.ChatMessage;
-import com.example.demo.Security.Jwt.JwtTokenProvider;
+import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.service.ChatRoomService;
 import com.example.demo.service.ChatService;
 import lombok.RequiredArgsConstructor;

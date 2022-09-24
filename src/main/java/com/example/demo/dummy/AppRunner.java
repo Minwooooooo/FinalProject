@@ -1,8 +1,8 @@
-package com.example.demo.Dummy;
+package com.example.demo.dummy;
 
 
 import com.example.demo.Entity.ChatRoom;
-import com.example.demo.Repository.RoomRepository;
+import com.example.demo.repository.RoomRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;

@@ -1,4 +1,4 @@
-package com.example.demo.Security.Jwt;
+package com.example.demo.security.jwt;
 
 
 import com.example.demo.dto.responseDto.ResponseDto;
