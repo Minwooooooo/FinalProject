@@ -1,7 +1,7 @@
 package com.example.demo.dummy;
 
 
-import com.example.demo.Entity.ChatRoom;
+import com.example.demo.entity.ChatRoom;
 import com.example.demo.repository.RoomRepository;
 
 import lombok.RequiredArgsConstructor;

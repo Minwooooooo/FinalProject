@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
 
-import com.example.demo.Entity.ChatRoom;
-import com.example.demo.Entity.EnterMember;
+import com.example.demo.entity.ChatRoom;
+import com.example.demo.entity.EnterMember;
 import com.example.demo.repository.EnterMemberRepository;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.dto.requestDto.CreatRoomRequestDto;

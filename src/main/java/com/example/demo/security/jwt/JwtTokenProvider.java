@@ -1,7 +1,7 @@
 package com.example.demo.security.jwt;
 
 
-import com.example.demo.Entity.Member;
+import com.example.demo.entity.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

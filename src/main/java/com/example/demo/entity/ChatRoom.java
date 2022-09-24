@@ -1,4 +1,4 @@
-package com.example.demo.Entity;
+package com.example.demo.entity;
 
 import com.example.demo.dto.requestDto.CreatRoomRequestDto;
 import lombok.*;
