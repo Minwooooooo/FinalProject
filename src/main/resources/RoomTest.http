@@ -13,4 +13,4 @@ accept: */*
 
 
 ### ListRoom
-GET http://localhost:8080/auth/chat/rooms
+GET http://localhost:8080/login/kakao?code=WnwNnpmmmyQ54pLnZPypPbnC72DNLnJoM7Is0Z41AYHFQowvF-4uGBPqrgvSMIw8cRQ2_QopyNkAAAGDb1WnVQ

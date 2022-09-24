@@ -11,6 +11,6 @@ public class RoomListResponseDto {
     private String roomName;
     private String roomId;
     private String category;
-    private long maxCount;
-    private long nowCount;
+    private Long maxCount;
+    private Long nowCount;
 }

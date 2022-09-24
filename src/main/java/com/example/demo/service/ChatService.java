@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 
-import com.example.demo.model.ChatMessage;
+import com.example.demo.Entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;

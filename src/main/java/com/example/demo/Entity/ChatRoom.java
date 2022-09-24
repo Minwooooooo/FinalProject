@@ -1,9 +1,7 @@
-package com.example.demo.model;
+package com.example.demo.Entity;
 
 import com.example.demo.dto.requestDto.CreatRoomRequestDto;
 import lombok.*;
-import org.hibernate.cfg.annotations.Nullability;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;

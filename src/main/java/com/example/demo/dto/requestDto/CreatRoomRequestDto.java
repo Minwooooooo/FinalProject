@@ -3,6 +3,9 @@ package com.example.demo.dto.requestDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+
 @Getter
 @Builder
 public class CreatRoomRequestDto {

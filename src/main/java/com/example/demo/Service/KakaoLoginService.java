@@ -1,11 +1,11 @@
-package com.example.demo.Service;
+package com.example.demo.service;
 
-import com.example.demo.Dto.ResponseDto.ResponseDto;
 import com.example.demo.Entity.Member;
 import com.example.demo.Repository.MemberRepository;
 
 
 import com.example.demo.Security.Jwt.JwtTokenProvider;
+import com.example.demo.dto.responseDto.ResponseDto;
 import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.ParseException;
@@ -47,6 +47,7 @@ public class KakaoLoginService {
         // 4. 로그인(Jwt토큰 생성)
         Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).get();
         String accessToken = jwtTokenProvider.creatToken(member);
+        System.out.println(accessToken);
 
         // 5. 로그인(Jwt토큰 전달)
         response.addHeader("Authorization","Bearer "+accessToken);
@@ -83,8 +84,6 @@ public class KakaoLoginService {
         Gson gson = new Gson();
         Map map = new HashMap();
         map = (Map) gson.fromJson(response,map.getClass());
-        System.out.println(map);
-        System.out.println("access_token = "+map.get("access_token"));
         String accessToken=map.get("access_token").toString();
         return accessToken;
     }
@@ -107,7 +106,6 @@ public class KakaoLoginService {
         JsonParser jsonParser = new JsonParser();
         Object obj = jsonParser.parse(response);
         JsonObject info = (JsonObject) obj;
-        System.out.println(info);
         return info;
     }
 

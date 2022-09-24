@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

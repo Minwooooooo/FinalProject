@@ -1,7 +1,14 @@
 package com.example.demo.Repository;
 
-import com.example.demo.Entity.Room;
+
+import com.example.demo.Entity.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoomRepository extends JpaRepository<Room,String> {
+import java.util.List;
+
+public interface RoomRepository extends JpaRepository<ChatRoom,String> {
+
+    List<ChatRoom> findAll();
+
+    ChatRoom findByRoomId(String roomId);
 }

@@ -1,20 +1,29 @@
-package com.example.demo.config;
+package com.example.demo.Security.config;
 
+import com.example.demo.Security.Jwt.AccessDeniedHandlerException;
+import com.example.demo.Security.Jwt.AuthenticationEntryPointException;
+import com.example.demo.Security.Jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 /**
  * Web Security 설정
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    private final AccessDeniedHandlerException accessDeniedHandlerException;
+    private final AuthenticationEntryPointException authenticationEntryPointException;
+    private final JwtTokenProvider jwtTokenProvider;
     @Bean
     public WebSecurityCustomizer ignoringCustomizer() {
         return (web) -> web.ignoring().antMatchers("/h2-console/**");
@@ -29,29 +38,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .frameOptions().sameOrigin() // SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을 해제한다.
             .and()
                 .formLogin() // 권한없이 페이지 접근하면 로그인 페이지로 이동한다.
-            .and()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPointException)
+                .accessDeniedHandler(accessDeniedHandlerException)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                    .antMatchers("/chat/**").hasRole("USER") // chat으로 시작하는 리소스에 대한 접근 권한 설정
-                    .anyRequest().permitAll(); // 나머지 리소스에 대한 접근 설정
+                .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
+                .anyRequest().permitAll();
+
+
     }
 
-    /**
-     * 테스트를 위해 In-Memory에 계정을 임의로 생성한다.
-     * 서비스에 사용시에는 DB데이터를 이용하도록 수정이 필요하다.
-     */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                    .withUser("mimi")
-                    .password("{noop}1234")
-                    .roles("USER")
-                .and()
-                    .withUser("nana")
-                    .password("{noop}1234")
-                    .roles("USER")
-                .and()
-                    .withUser("guest")
-                    .password("{noop}1234")
-                    .roles("GUEST");
-    }
 }

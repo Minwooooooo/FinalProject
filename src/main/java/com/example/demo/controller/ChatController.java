@@ -1,15 +1,17 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.model.ChatMessage;
+import com.example.demo.Entity.ChatMessage;
+import com.example.demo.Security.Jwt.JwtTokenProvider;
 import com.example.demo.service.ChatRoomService;
 import com.example.demo.service.ChatService;
-import com.example.demo.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,8 +26,8 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("token") String token) {
-        String nickname = jwtTokenProvider.getUserNameFromJwt(token);
+    public void message(ChatMessage message, HttpServletRequest request) {
+        String nickname = jwtTokenProvider.getMemberName(request);
         // 로그인 회원 정보로 대화명 설정
         message.setSender(nickname);
         // 채팅방 인원수 세팅

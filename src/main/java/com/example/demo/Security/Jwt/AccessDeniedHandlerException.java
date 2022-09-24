@@ -1,7 +1,7 @@
 package com.example.demo.Security.Jwt;
 
 
-import com.example.demo.Dto.ResponseDto.ResponseDto;
+import com.example.demo.dto.responseDto.ResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.security.access.AccessDeniedException;

@@ -1,11 +1,9 @@
 package com.example.demo.Dummy;
 
 
-import com.example.demo.model.ChatRoom;
-import com.example.demo.repo.RoomRepository;
-
-import com.example.demo.Entity.Room;
+import com.example.demo.Entity.ChatRoom;
 import com.example.demo.Repository.RoomRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
@@ -37,11 +38,13 @@ public class JwtTokenProvider {
     // subject : Kakao에서 받은 meberId (unique)
     // claim : 이름/권한
     public String creatToken(Member member){
+        System.out.println(member.getMemberName());
+        System.out.println(member.getId());
         return Jwts.builder()
                 .setSubject(member.getId().toString())
                 .claim("name",member.getMemberName())
-                .claim("auth",member.getUserRole())
-                .signWith(JWT_KEY, SignatureAlgorithm.HS256)
+                .claim("auth",member.getUserRole().toString())
+                .signWith(JWT_KEY,SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -67,11 +70,27 @@ public class JwtTokenProvider {
         return claims;
     }
 
+    // Request에서 토큰 가져오기
+    public String getToken(HttpServletRequest request) {
+        String accessToken = request.getHeader(JwtCustomFilter.AUTHORIZATION_HEADER);
+        //System.out.println("Filter에서 받은 토큰 : "+accessToken);
+        if (StringUtils.hasText(accessToken) && accessToken.startsWith(JwtCustomFilter.TOKEN_TYPE)) {
+            return accessToken.substring(7);
+        }
+        return null;
+    }
+
+    // Request에서 이름 가져오기
+    public String getMemberName(HttpServletRequest request){
+        String token = getToken(request);
+        String memberName=tempClaim(token).get("name").toString();
+        return memberName;
+    }
+
     // 토큰 유효성 검증
-    public String validateToken(HttpServletRequest request) {
+    public String validateToken(String token) {
         String returnMsg;
         try{
-            String token = request.getHeader("Authorization").substring(7);
             tempClaim(token);
             return null;
         } catch (SecurityException | MalformedJwtException e) {
@@ -96,6 +115,7 @@ public class JwtTokenProvider {
             return returnMsg;
         }
     }
+
 
 
 }

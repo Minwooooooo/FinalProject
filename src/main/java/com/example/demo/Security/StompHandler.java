@@ -1,10 +1,10 @@
-package com.example.demo.config.handler;
+package com.example.demo.Security;
 
 
-import com.example.demo.model.ChatMessage;
+import com.example.demo.Entity.ChatMessage;
+import com.example.demo.Security.Jwt.JwtTokenProvider;
 import com.example.demo.service.ChatRoomService;
 import com.example.demo.service.ChatService;
-import com.example.demo.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;

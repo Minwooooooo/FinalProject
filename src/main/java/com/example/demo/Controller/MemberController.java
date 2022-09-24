@@ -1,7 +1,7 @@
-package com.example.demo.Controller;
+package com.example.demo.controller;
 
-import com.example.demo.Dto.ResponseDto.ResponseDto;
-import com.example.demo.Service.KakaoLoginService;
+import com.example.demo.dto.responseDto.ResponseDto;
+import com.example.demo.service.KakaoLoginService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.ParseException;

@@ -1,15 +1,17 @@
 package com.example.demo.service;
 
+
+import com.example.demo.Entity.ChatRoom;
+import com.example.demo.Entity.EnterMember;
+import com.example.demo.Repository.EnterMemberRepository;
+import com.example.demo.Repository.RoomRepository;
 import com.example.demo.dto.requestDto.CreatRoomRequestDto;
 import com.example.demo.dto.responseDto.RoomListResponseDto;
-import com.example.demo.model.ChatRoom;
-import com.example.demo.model.EnterMember;
-import com.example.demo.repo.EnterMemberRepository;
-import com.example.demo.repo.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class ChatRoomService {
     private final EnterMemberRepository enterMemberRepository;
 
     // 채팅방 생성
-    public ChatRoom createChatRoom(CreatRoomRequestDto creatRoomRequestDto) {
+    public ChatRoom createChatRoom(CreatRoomRequestDto creatRoomRequestDto, HttpServletRequest request) {
         ChatRoom chatRoom = ChatRoom.create(creatRoomRequestDto);
         roomRepository.save(chatRoom);
         return chatRoom;
