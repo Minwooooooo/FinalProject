@@ -33,7 +33,4 @@ public class Room {
     @Column
     private String roomPw;
 
-    public enum categoryList{
-        생활영어, 캠스터디, 시험대비, 스크립트
-    }
 }
