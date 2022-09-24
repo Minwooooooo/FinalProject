@@ -4,14 +4,15 @@ import com.example.demo.domain.Account;
 import com.example.demo.dto.request.AccountRequestDto;
 import com.example.demo.dto.request.LoginRequestDto;
 import com.example.demo.global.dto.ResponseDto;
+import com.example.demo.jwt.JwtUtil;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.service.impl.AccountServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
@@ -19,11 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 public class AccountService implements AccountServiceImpl {
 
     private final AccountRepository accountRepository;
-    private final PasswordEncoder passwordEncoder;
-//    private final JwtTuil jwtTuil;
+    private final JwtUtil jwtUtil;
 //    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
+    @Transactional
     public ResponseDto<?> signup(AccountRequestDto reqDto) {
         try {
             if (accountRepository.findByEmail(reqDto.getEmail()).isPresent()){
@@ -39,7 +40,16 @@ public class AccountService implements AccountServiceImpl {
     }
 
     @Override
+    @Transactional
     public ResponseDto<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
+        Account account= accountRepository.findByEmail(requestDto.getEmail()).orElseThrow(
+                () -> new NoResultException()
+        );
+
+//        @todo Token auth
+
+        TokenDto tokenDto= jwtUtil.createAllToken(account.getEmail());
+
         return null;
     }
 }

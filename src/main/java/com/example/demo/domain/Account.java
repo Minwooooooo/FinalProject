@@ -18,15 +18,18 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class Account {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    //    @Todo err 이 부분 저번에 민우님이 이야기해주신 부분. 카톡 id를 인덱스로 쓰자.
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
     @NotNull
-    private Long kakaoId;
+    private String kakaoId;
 
     @NotNull
     private String email;
+
+//    nick name
 
     public Account(AccountRequestDto requestDto){
         this.kakaoId= requestDto.getKakaoId();
