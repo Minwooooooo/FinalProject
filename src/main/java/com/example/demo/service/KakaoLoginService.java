@@ -29,25 +29,63 @@ public class KakaoLoginService {
     private final JwtTokenProvider jwtTokenProvider;
     final static String BE_SERVER = "localhost:8080";
 
-    public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response) throws IOException, ParseException {
+        public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response) throws IOException, ParseException {
         // 0. FE에서 코드받기
         //https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=6d51c4942788dc0abd939ace6ee2d8b7&redirect_uri=http://localhost:3000/login/kakao
 
+        // 1. 토큰 받기~
+        String accessTokenAtOnce= null;
+        try {
+            accessTokenAtOnce= getKakaoToken(code);
+        }catch (Exception e){
+            return ResponseDto.fail("ACCESS_TOKEN_AT_ONCE_PARSING_ERR", e + "getKakaoToken function err");
+        }finally {
+            if (accessTokenAtOnce == null){
+                System.err.println("ACCESS_TOKEN_PARSING_ERR");
+            }
+        }
 
-        // 1. 토큰 받기
-        String Accesstoken=getKakaoToken(code);
         // 2. 정보 받기
-        JsonObject memberInfo=getInfo(Accesstoken);
+        JsonObject memberInfo= null;
+        try {
+            memberInfo= getInfo(accessTokenAtOnce);
+        }catch (Exception e){
+            return ResponseDto.fail("INFO_PARSING_ERR", e + "getInfo function err");
+        }finally {
+            if (memberInfo == null){
+                System.err.println("INFO_PARSING_ERR");
+            }
+        }
+
         // 3. 기존 가입 여부 확인
         if(!chekExistMember(memberInfo)){
             // false : 신규 회원
             // 회원가입
-            signIn(memberInfo);
+            try {
+//                Transactional & save
+                signIn(memberInfo);
+            }catch (Exception e){
+                return ResponseDto.fail("SIGN_IN_ERR", e + "signIn function err");
+            }
         }
+
         // 4. 로그인(Jwt토큰 생성)
-        Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).get();
-        String accessToken = jwtTokenProvider.creatToken(member);
-        System.out.println(accessToken);
+        Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).orElseThrow(
+                () -> new RuntimeException("NOT_FOUND_ID_IN_MEMBER_INFO")
+        );
+
+        String accessToken= "";
+        try {
+            accessToken = jwtTokenProvider.creatToken(member);
+        }catch (Exception e){
+            System.err.println("jwtTokenProvider.creatToken allocation Err in accessToken");
+        }finally {
+            if (accessToken.equals("")){
+                throw new NullArgumentException("accessToken is null");
+            }
+//            System.out.println(accessToken);
+        }
+
 
         // 5. 로그인(Jwt토큰 전달)
         response.addHeader("Authorization","Bearer "+accessToken);
@@ -55,6 +93,7 @@ public class KakaoLoginService {
 
         return ResponseDto.success(member.getMemberName()+"님 로그인 성공");
     }
+
     // KakaoToken 받기
     // Kakao developer의 예제를 기반으로 CURL to JAVA 컨버터를 통해서 작성
     public String getKakaoToken(String code) throws IOException{
@@ -117,10 +156,15 @@ public class KakaoLoginService {
 
     // 유저 기존 가입여부 확인
     public boolean chekExistMember(JsonObject info){
-        if(memberRepository.existsById(Long.valueOf(info.get("id").toString()))){
-            return true;
+        boolean existId= false;
+
+        try {
+            existId= memberRepository.existsById(Long.valueOf(info.get("id").toString()));
+        }catch (Exception e){
+            System.err.println("CAN'T CHECK ID as memberRepository existsById");
         }
-        return false;
+
+        return existId;
     }
 
 
@@ -151,7 +195,12 @@ public class KakaoLoginService {
                 .profileImage(profileImage)
                 .userRole(Member.Authority.ROLE_USER)
                 .build();
-        memberRepository.save(member);
+
+        try {
+            memberRepository.save(member);
+        }catch (Exception e){
+            System.err.println("memberRepository.save err in signIn func" + e);
+        }
         System.out.println(properties);
     }
 }
