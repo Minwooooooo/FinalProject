@@ -62,10 +62,11 @@ public class JwtTokenProvider {
 
     // 토큰 복호화
     public Claims tempClaim(String token){
+        String temp_token=token.substring(7);
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(JWT_KEY)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(temp_token)
                 .getBody();
         return claims;
     }
@@ -83,6 +84,12 @@ public class JwtTokenProvider {
     // Request에서 이름 가져오기
     public String getMemberName(HttpServletRequest request){
         String token = getToken(request);
+        String memberName=tempClaim(token).get("name").toString();
+        return memberName;
+    }
+
+    // Token에서 이름 가져오기
+    public String getMemberNameByToken(String token){
         String memberName=tempClaim(token).get("name").toString();
         return memberName;
     }

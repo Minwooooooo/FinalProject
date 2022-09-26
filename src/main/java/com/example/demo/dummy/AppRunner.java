@@ -66,6 +66,16 @@ public class AppRunner implements ApplicationRunner {
                 .build();
         roomRepository.save(testRoom4);
 
+        ChatRoom testRoom5 = ChatRoom.builder()
+                .roomId(UUID.randomUUID().toString())
+                .roomName("캠스터디캠스터디캠스터디캠스터디캠스터디캠스터디")
+                .category("캠스터디")
+                .maxEnterMember(6)
+                .memberCount(0L)
+                .lock(false)
+                .roomPw("")
+                .build();
+        roomRepository.save(testRoom5);
     }
 }
 

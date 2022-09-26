@@ -1,4 +1,18 @@
 ### CreatRoom
+POST http://35.174.109.220:8080/auth/chat/room
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNDQyMTA5NjQ2IiwibmFtZSI6IuygleuvvOyasCIsImF1dGgiOiJST0xFX1VTRVIifQ.w52wo6JO6UjvGsqRVb6D0js6ljm-qHBN9r6IG-RoCQs
+Content-Type: application/json
+accept: */*
+
+{
+  "roomName" : "보미님 화이팅",
+  "category" : "생활영어" ,
+  "memberCount" : "6",
+  "lock": false,
+  "roomPw" : ""
+}
+
+### CreatRoom
 POST http://localhost:8080/auth/chat/room
 Content-Type: application/json
 accept: */*
@@ -14,3 +28,5 @@ accept: */*
 
 ### ListRoom
 GET http://localhost:8080/login/kakao?code=WnwNnpmmmyQ54pLnZPypPbnC72DNLnJoM7Is0Z41AYHFQowvF-4uGBPqrgvSMIw8cRQ2_QopyNkAAAGDb1WnVQ
+
+#

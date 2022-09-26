@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.security.Principal;
 import java.util.Optional;
 
+/*
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -33,7 +34,8 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT == accessor.getCommand()) { // websocket 연결요청
             String jwtToken = accessor.getFirstNativeHeader("token");
-            log.info("CONNECT {}", jwtToken);
+            log.info("HELLO {}", jwtToken);
+            System.out.println(jwtToken);
             // Header의 jwt token 검증
             jwtTokenProvider.validateToken(jwtToken);
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) { // 채팅룸 구독요청
@@ -64,3 +66,5 @@ public class StompHandler implements ChannelInterceptor {
         return message;
     }
 }
+
+ */

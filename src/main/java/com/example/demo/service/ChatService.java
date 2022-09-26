@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 
+import com.example.demo.dto.responseDto.MessageDto;
 import com.example.demo.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -12,6 +13,7 @@ public class ChatService {
 
     private final ChatRoomService chatRoomService;
     private final SimpMessageSendingOperations messageSendingOperations;
+    private final ChatHandler chatHandler;
 
     /**
      * destination정보에서 roomId 추출
@@ -27,17 +29,9 @@ public class ChatService {
     /**
      * 채팅방에 메시지 발송
      */
-    public void sendChatMessage(ChatMessage chatMessage) {
-        chatMessage.setUserCount(chatRoomService.getUserCount(chatMessage.getRoomId()));
-        if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
-            chatMessage.setMessage(chatMessage.getSender() + "님이 방에 입장했습니다.");
-            chatMessage.setSender("[알림]");
-        } else if (ChatMessage.MessageType.QUIT.equals(chatMessage.getType())) {
-            chatMessage.setMessage(chatMessage.getSender() + "님이 방에서 나갔습니다.");
-            chatMessage.setSender("[알림]");
-        }
-
-        messageSendingOperations.convertAndSend("/sub/chat/room/"+chatMessage.getRoomId(),chatMessage.getMessage());
+    public void sendChatMessage(ChatMessage chatMessage,String memberName) {
+        MessageDto messageDto=chatHandler.ChatTypeHandler(chatMessage,memberName);
+        messageSendingOperations.convertAndSend("/sub/chat/room/"+chatMessage.getRoomId(),messageDto);
     }
 
 }
