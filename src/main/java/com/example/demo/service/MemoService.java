@@ -8,6 +8,8 @@ import com.example.demo.entity.Memo;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.MemoRepository;
 import com.example.demo.repository.RoomRepository;
+import com.example.demo.security.jwt.JwtTokenProvider;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,20 +30,18 @@ public class MemoService {
 
     private final RoomRepository roomRepository;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Transactional
     public MemoDto saveMemo(MemoRequestDto memoRequestDto, HttpServletRequest request) {
 
-        String memberName = request.getHeader("Member-Name");
-
-        Member member = memberRepository.findByMemberName(memberName);
-
-        //네임으로 식별 노노 토큰이랑 같이 식별 근데 어떻게 하는지 모르겠다...
+        Member member = findMember(request);
 
         ChatRoom room = roomRepository.findByRoomId(memoRequestDto.getRoomId());
 
-
         Memo memo = Memo.builder()
                 .member(member)
+                .roomId(room.getRoomId())
                 .roomName(room.getRoomName())
                 .category(room.getCategory())
                 .contents(memoRequestDto.getContents())
@@ -51,7 +51,8 @@ public class MemoService {
         memoRepository.save(memo);
 
         return MemoDto.builder()
-                .memberName(memberName)
+                .memberName(member.getMemberName())
+                .roomId(memo.getRoomId())
                 .roomName(memo.getRoomName())
                 .category(memo.getCategory())
                 .contents(memo.getContents())
@@ -61,9 +62,9 @@ public class MemoService {
 
 
     @Transactional
-    public List<MemoDto> getAllMemo(Long id) {
-        Optional<Member> optionalMember = memberRepository.findById(id); //아이디로 찾는건가??
-        Member member = optionalMember.get();
+    public List<MemoDto> getAllMemo(HttpServletRequest request) {
+
+        Member member = findMember(request);
 
         List<MemoDto> memoDtos = new ArrayList<>();
         List<Memo> memoList = memoRepository.findAllByMember(member);
@@ -72,6 +73,7 @@ public class MemoService {
             memoDtos.add(
                     MemoDto.builder()
                             .memberName(member.getMemberName())
+                            .roomId(memo.getRoomId())
                             .roomName(memo.getRoomName())
                             .category(memo.getCategory())
                             .contents(memo.getContents())
@@ -85,15 +87,15 @@ public class MemoService {
 
 
         @Transactional
-        public MemoDto getMemo (Long id, String roomName){
+        public MemoDto getMemo (HttpServletRequest request, String roomId){
 
-            Optional<Member> optionalMember = memberRepository.findById(id); //아이디로 찾는건가??
-            Member member = optionalMember.get();
+            Member member = findMember(request);
 
-            Memo memo = memoRepository.findByMemberAndRoomName(member, roomName);
+            Memo memo = memoRepository.findByMemberAndRoomId(member, roomId);
 
             return MemoDto.builder()
                     .memberName(member.getMemberName())
+
                     .roomName(memo.getRoomName())
                     .category(memo.getCategory())
                     .contents(memo.getContents())
@@ -104,13 +106,12 @@ public class MemoService {
 
 
         @Transactional
-        public MemoDto updateMemo (Long id, MemoRequestDto memoRequestDto){
+        public MemoDto updateMemo (HttpServletRequest request, MemoRequestDto memoRequestDto){
             ChatRoom room = roomRepository.findByRoomId(memoRequestDto.getRoomId());
 
-            Optional<Member> optionalMember = memberRepository.findById(id); //아이디로 찾는건가??
-            Member member = optionalMember.get();
+            Member member = findMember(request);
 
-            Memo memo = memoRepository.findByMemberAndRoomName(member, room.getRoomName());
+            Memo memo = memoRepository.findByMemberAndRoomId(member, room.getRoomId());
 
             memo.updateMemo(memoRequestDto.getContents());
 
@@ -126,15 +127,32 @@ public class MemoService {
 
 
     @Transactional
-    public MemoDto deleteMemo (Long id, String roomName){
-        Optional<Member> optionalMember = memberRepository.findById(id); //아이디로 찾는건가??
-        Member member = optionalMember.get();
+    public MemoDto deleteMemo (HttpServletRequest request, String roomId){
 
-        Memo memo = memoRepository.findByMemberAndRoomName(member, roomName);
+        Member member = findMember(request);
+
+        Memo memo = memoRepository.findByMemberAndRoomId(member, roomId);
         memoRepository.delete(memo);
         return MemoDto.builder()
                 .roomName(memo.getRoomName())
                 .build();
+    }
+
+
+    //HttpServletRequest에서 사용자 id 꺼내오기
+    public Member findMember (HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+
+        Claims claim = jwtTokenProvider.tempClaim(token);
+
+        String memberId = claim.getSubject();
+
+        Long id = Long.valueOf(memberId);
+
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        Member member = optionalMember.get();
+
+        return member;
     }
 
 

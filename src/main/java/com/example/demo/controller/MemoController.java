@@ -21,24 +21,24 @@ public class MemoController {
         return ResponseDto.success(memoService.saveMemo(memoRequestDto,request));
     }
 
-    @GetMapping(value = "/memo/{id}")
-    public ResponseDto<?> getMemo(@PathVariable Long id, @RequestBody String roomName){
-        return ResponseDto.success(memoService.getMemo(id, roomName));
+    @GetMapping(value = "/memo/{roomid}")
+    public ResponseDto<?> getMemo(HttpServletRequest request, @PathVariable String roomId){
+        return ResponseDto.success(memoService.getMemo(request, roomId));
     }
 
-    @GetMapping(value = "/memo/{id}")
-    public ResponseDto<?> getAllMemo(@PathVariable Long id){
-        return ResponseDto.success(memoService.getAllMemo(id));
+    @GetMapping(value = "/memo")
+    public ResponseDto<?> getAllMemo(HttpServletRequest request){
+        return ResponseDto.success(memoService.getAllMemo(request));
     }
 
-    @PutMapping(value = "/memo/{id}")
-    public ResponseDto<?> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto memoRequestDto){
-        return ResponseDto.success(memoService.updateMemo(id, memoRequestDto));
+    @PutMapping(value = "/memo")
+    public ResponseDto<?> updateMemo(HttpServletRequest request, @RequestBody MemoRequestDto memoRequestDto){
+        return ResponseDto.success(memoService.updateMemo(request, memoRequestDto));
     }
 
-    @DeleteMapping(value = "/memo/{id}")
-    public ResponseDto<?> deleteMemo(@PathVariable Long id, @RequestBody String roomName){
-        return ResponseDto.success(memoService.deleteMemo(id, roomName));
+    @DeleteMapping(value = "/memo/{roomid}")
+    public ResponseDto<?> deleteMemo(@PathVariable String roomId, HttpServletRequest request){
+        return ResponseDto.success(memoService.deleteMemo(request, roomId));
     }
 
 }
