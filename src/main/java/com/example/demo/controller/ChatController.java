@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 public class ChatController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final ChatRoomService chatRoomService;
     private final ChatService chatService;
     private final ChatHandler chatHandler;
+
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
@@ -31,6 +31,7 @@ public class ChatController {
     public void message(ChatMessage message,@Header("Authorization") String token) {
         System.out.println(message.getType().toString());
         String nickname = jwtTokenProvider.getMemberNameByToken(token);
-        chatService.sendChatMessage(message,nickname);
+        String image = chatHandler.getImageByToken(token);
+        chatService.sendChatMessage(message,nickname,image);
     }
 }

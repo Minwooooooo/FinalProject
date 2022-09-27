@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class MessageDto {
+    private int type;
     private String sender;
     private String msg;
+    private String image;
 }
