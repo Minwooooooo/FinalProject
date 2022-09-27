@@ -6,6 +6,7 @@ import com.example.demo.dto.requestDto.MemoRequestDto;
 import com.example.demo.entity.Member;
 import com.example.demo.entity.Memo;
 import com.example.demo.repository.MemoRepository;
+import com.example.demo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,10 @@ import java.util.Optional;
 @Transactional
 public class MemoService {
     private final MemoRepository memoRepository;
-//    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public ResponseDto<?> createMemo(MemoRequestDto requestDto, HttpServletRequest request){
-
-        Optional<Memo> memoOptional= Optional.ofNullable(new Memo(requestDto));
-        Memo memo= memoOptional.orElseThrow(
-                () -> new RuntimeException("MEMO_REQUEST_ERR")
-        );
+        Memo memo = getMemoAsOptional(requestDto);
 
         if (memo.getContent().length() == 0){
             try {
@@ -49,16 +46,9 @@ public class MemoService {
 
     public ResponseDto<?> getMemos(){
 
-        String name= jwtTokenProvider.getMemberName();
-        Optional<Member> memberOptional= Optional.ofNullable(memberRepository.findByMemberName(name));
-        Member member= memberOptional.orElseThrow(
-                () -> new RuntimeException("NOT_FOUND_MEMBER_NAME")
-        );
-
-        Optional<List<Memo>> memoOptional= Optional.ofNullable(memoRepository.findAllByMember(member));
-        List<Memo> memos= memoOptional.orElseThrow(
-                () -> new RuntimeException("NOT_FIND_MEMOS")
-        );
+        String name = getNameAsOptional();
+        Member member = getMemberAsOptional(name);
+        List<Memo> memos = getMemoListAsOptional(member);
 
         MemoResponseDto responseDto= MemoResponseDto.builder()
                 .memoList(memos)
@@ -67,11 +57,39 @@ public class MemoService {
         return ResponseDto.success(responseDto);
     }
 
+
+
+    //    Private
+    private static Memo getMemoAsOptional(MemoRequestDto requestDto) {
+        Optional<Memo> memoOptional= Optional.ofNullable(new Memo(requestDto));
+        Memo memo= memoOptional.orElseThrow(
+                () -> new RuntimeException("MEMO_REQUEST_ERR")
+        );
+        return memo;
+    }
+    private static Member getMemberAsOptional(String name) {
+        Optional<Member> memberOptional= Optional.ofNullable(memberRepository.findByMemberName(name));
+        Member member= memberOptional.orElseThrow(
+                () -> new RuntimeException("NOT_FOUND_MEMBER_NAME")
+        );
+        return member;
+    }
+    private String getNameAsOptional() {
+        Optional<String> memberNameOptional = Optional.ofNullable(jwtTokenProvider.getMemberName());
+        String name= memberNameOptional.orElseThrow(
+                () -> new RuntimeException("NOT_FOUND_TOKEN OR NOT_FOUND_MEMBER")
+        );
+        return name;
+    }
+    private List<Memo> getMemoListAsOptional(Member member) {
+        Optional<List<Memo>> memoOptional= Optional.ofNullable(memoRepository.findAllByMember(member));
+        List<Memo> memos= memoOptional.orElseThrow(
+                () -> new RuntimeException("NOT_FIND_MEMOS")
+        );
+        return memos;
+    }
 }
 
 
-//    Token에서 member 정보 확인
-//    방 ID로 방 이름, 카테고리 검색
-//        메모 저장
-//
-//        메모 수정
+
+//  todo 방 ID로 방 이름, 카테고리 검색
