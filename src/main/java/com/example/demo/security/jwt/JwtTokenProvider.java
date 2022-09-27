@@ -60,9 +60,10 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal,null,authorities);
     }
 
-    // 토큰 복호화
+    // 토큰 복호화(+Baerer)
     public Claims tempClaim(String token){
         String temp_token=token.substring(7);
+        System.out.println("tempClain : "+temp_token);
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(JWT_KEY)
                 .build()
@@ -70,6 +71,17 @@ public class JwtTokenProvider {
                 .getBody();
         return claims;
     }
+
+    // 토큰 복호화(+NoBaerer)
+    public Claims tempClaimNoBaerer(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(JWT_KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims;
+    }
+
 
     // Request에서 토큰 가져오기
     public String getToken(HttpServletRequest request) {
@@ -93,6 +105,8 @@ public class JwtTokenProvider {
         String memberName=tempClaim(token).get("name").toString();
         return memberName;
     }
+
+
 
     // 토큰 유효성 검증
     public String validateToken(String token) {
