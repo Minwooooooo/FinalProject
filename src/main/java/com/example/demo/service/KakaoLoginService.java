@@ -53,7 +53,7 @@ public class KakaoLoginService {
         response.addHeader("Authorization","Bearer "+accessToken);
         response.addHeader("Member-Name", member.getMemberName());
 
-        return ResponseDto.success(member.getMemberName()+"님 로그인 성공");
+        return ResponseDto.success(member.getMemberName());
     }
     // KakaoToken 받기
     // Kakao developer의 예제를 기반으로 CURL to JAVA 컨버터를 통해서 작성

@@ -2,38 +2,64 @@ package com.example.demo.service;
 
 import com.example.demo.dto.responseDto.MessageDto;
 import com.example.demo.entity.ChatMessage;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import com.example.demo.entity.Member;
+import com.example.demo.repository.MemberRepository;
+import com.example.demo.security.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.MessageDigest;
-import java.security.Principal;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ChatHandler {
+    private final MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final ChatBotService chatBotService;
 
-    public MessageDto ChatTypeHandler(ChatMessage chatMessage, String memberName) {
+    public String getImageByToken(String token) {
+        String temp_id = jwtTokenProvider.tempClaim(token).getSubject();
+        Long id = Long.valueOf(temp_id);
+        Member member = memberRepository.findById(id).get();
+        String image =member.getProfileImage();
+        return image;
+    }
+
+    public MessageDto ChatTypeHandler(ChatMessage chatMessage, String memberName, String image) {
         MessageDto temp_msg = null;
         if (chatMessage.getType().equals(chatMessage.getType().ENTER)) { // websocket 연결요청
             temp_msg = MessageDto.builder()
-                    .sender("일림")
+                    .type(chatMessage.getType().ordinal())
+                    .sender("알림")
+                    .image("")
                     .msg(memberName+"님 하잉")
                     .build();
             //인원수 +
         }
         else if (chatMessage.getType().equals(chatMessage.getType().QUIT)) { // websocket 연결요청
             temp_msg = MessageDto.builder()
-                    .sender("일림")
+                    .type(chatMessage.getType().ordinal())
+                    .sender("알림")
+                    .image("")
                     .msg(memberName+"님 빠잉")
                     .build();
             //인원수 -
         }
         else if (chatMessage.getType().equals(chatMessage.getType().TALK)) { // websocket 연결요청
+            String msg=chatMessage.getMessage();
+            if(chatBotService.botCheck(msg)){
+                String new_message= chatBotService.botRunner(chatMessage);
+                temp_msg = MessageDto.builder()
+                        .type(chatMessage.getType().ordinal())
+                        .sender("알리미")
+                        .image("")
+                        .msg(new_message)
+                        .build();
+                return temp_msg;
+            }
             temp_msg = MessageDto.builder()
+                    .type(chatMessage.getType().ordinal())
                     .sender(memberName)
+                    .image(image)
                     .msg(chatMessage.getMessage())
                     .build();
         }

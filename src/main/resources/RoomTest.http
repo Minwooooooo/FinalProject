@@ -26,7 +26,23 @@ accept: */*
 }
 
 
-### ListRoom
-GET http://localhost:8080/login/kakao?code=WnwNnpmmmyQ54pLnZPypPbnC72DNLnJoM7Is0Z41AYHFQowvF-4uGBPqrgvSMIw8cRQ2_QopyNkAAAGDb1WnVQ
+### Timer
+POST http://35.174.109.220:8080/auth/timer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNDQyNjYzNDEwIiwibmFtZSI6IuuLpOydgCIsImF1dGgiOiJST0xFX1VTRVIifQ.FmLciZy1afVgp5qs7NShDyLwK_K15weiNtMSAmuPCRg
+Content-Type: application/json
+accept: */*
 
-#
+{
+"studyTime": "하잉"
+}
+
+### Timer
+POST http://localhost:8080/auth/timer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNDQyNjYzNDEwIiwibmFtZSI6IuuLpOydgCIsImF1dGgiOiJST0xFX1VTRVIifQ.FmLciZy1afVgp5qs7NShDyLwK_K15weiNtMSAmuPCRg
+Content-Type: application/json
+accept: */*
+
+{
+  "studyTime": "하잉"
+}
+

@@ -26,10 +26,12 @@ public class MemoController {
         return ResponseDto.success(memoService.getMemo(request, roomId));
     }
 
+
     @GetMapping(value = "/memo")
     public ResponseDto<?> getAllMemo(HttpServletRequest request){
         return ResponseDto.success(memoService.getAllMemo(request));
     }
+
 
     @PutMapping(value = "/memo")
     public ResponseDto<?> updateMemo(HttpServletRequest request, @RequestBody MemoRequestDto memoRequestDto){

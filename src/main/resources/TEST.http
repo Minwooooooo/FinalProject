@@ -1,0 +1,13 @@
+GET http://localhost:8080/test/login
+
+
+### Timer
+POST http://localhost:8080/auth/timer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMiLCJuYW1lIjoi64KYIiwiYXV0aCI6IlJPTEVfVVNFUiJ9.KXqhtyPgvr7Slj1NtRb_Uw5QiSLXAhTBnQVviYFZeR4
+Content-Type: application/json
+accept: */*
+
+{
+  "roomId": "e09e3794-699c-4df8-a650-337219fe0ae3",
+  "studyTime": "3000000"
+}
