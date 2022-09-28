@@ -1,0 +1,48 @@
+### CreatRoom
+POST http://35.174.109.220:8080/auth/chat/room
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNDQyMTA5NjQ2IiwibmFtZSI6IuygleuvvOyasCIsImF1dGgiOiJST0xFX1VTRVIifQ.w52wo6JO6UjvGsqRVb6D0js6ljm-qHBN9r6IG-RoCQs
+Content-Type: application/json
+accept: */*
+
+{
+  "roomName" : "보미님 화이팅",
+  "category" : "생활영어" ,
+  "memberCount" : "6",
+  "lock": false,
+  "roomPw" : ""
+}
+
+### CreatRoom
+POST http://localhost:8080/auth/chat/room
+Content-Type: application/json
+accept: */*
+
+{
+  "roomName" : "스터티방",
+  "category" : "생활영어" ,
+  "memberCount" : "6",
+  "lock": false,
+  "roomPw" : ""
+}
+
+
+### Timer
+POST http://35.174.109.220:8080/auth/timer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNDQyNjYzNDEwIiwibmFtZSI6IuuLpOydgCIsImF1dGgiOiJST0xFX1VTRVIifQ.FmLciZy1afVgp5qs7NShDyLwK_K15weiNtMSAmuPCRg
+Content-Type: application/json
+accept: */*
+
+{
+"studyTime": "하잉"
+}
+
+### Timer
+POST http://localhost:8080/auth/timer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNDQyNjYzNDEwIiwibmFtZSI6IuuLpOydgCIsImF1dGgiOiJST0xFX1VTRVIifQ.FmLciZy1afVgp5qs7NShDyLwK_K15weiNtMSAmuPCRg
+Content-Type: application/json
+accept: */*
+
+{
+  "studyTime": "하잉"
+}
+
