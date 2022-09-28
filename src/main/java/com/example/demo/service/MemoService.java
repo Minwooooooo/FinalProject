@@ -95,7 +95,6 @@ public class MemoService {
 
             return MemoDto.builder()
                     .memberName(member.getMemberName())
-
                     .roomName(memo.getRoomName())
                     .category(memo.getCategory())
                     .contents(memo.getContents())

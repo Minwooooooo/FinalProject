@@ -63,7 +63,6 @@ public class JwtTokenProvider {
     // 토큰 복호화(+Baerer)
     public Claims tempClaim(String token){
         String temp_token=token.substring(7);
-        System.out.println("tempClain : "+temp_token);
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(JWT_KEY)
                 .build()

@@ -27,9 +27,7 @@ public class StudyService {
     // 타이머 기록
     @Transactional
     public ResponseDto<?> StudyTimer(TimerRequestDto timerRequestDto, HttpServletRequest request){
-        System.out.println(timerRequestDto.getRoomId());
-        System.out.println(timerRequestDto.getStudyTime());
-        System.out.println(request.getHeader("Authorization"));
+
         // 유저 확인
         String temp_id=jwtTokenProvider.tempClaimNoBaerer(jwtTokenProvider.getToken(request)).getSubject();
         Long member_id =Long.valueOf(temp_id);
@@ -59,7 +57,7 @@ public class StudyService {
             String beforeTime = studyTimer.getTime();
             studyTimer.editTime(timerRequestDto.getStudyTime());
             String msg = beforeTime + "에서 " + timerRequestDto.getStudyTime() + "으로 변경완료";
-            System.out.println(msg);
+
             return ResponseDto.success(msg);
         }
     }
