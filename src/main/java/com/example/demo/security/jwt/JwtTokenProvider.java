@@ -2,6 +2,7 @@ package com.example.demo.security.jwt;
 
 
 import com.example.demo.entity.Member;
+import com.example.demo.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -135,8 +137,5 @@ public class JwtTokenProvider {
             return returnMsg;
         }
     }
-
-
-
 
 }
