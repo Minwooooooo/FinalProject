@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+@RequestMapping(value = "/auth")
 @RestController
 @RequiredArgsConstructor
 public class MemoController {
@@ -19,28 +19,6 @@ public class MemoController {
     @PostMapping(value = "/memo")
     public ResponseDto<?> saveMemo(@RequestBody MemoRequestDto memoRequestDto, HttpServletRequest request){
         return ResponseDto.success(memoService.saveMemo(memoRequestDto,request));
-    }
-
-    @GetMapping(value = "/memo/{roomid}")
-    public ResponseDto<?> getMemo(HttpServletRequest request, @PathVariable String roomId){
-        return ResponseDto.success(memoService.getMemo(request, roomId));
-    }
-
-
-    @GetMapping(value = "/memo")
-    public ResponseDto<?> getAllMemo(HttpServletRequest request){
-        return ResponseDto.success(memoService.getAllMemo(request));
-    }
-
-
-    @PutMapping(value = "/memo")
-    public ResponseDto<?> updateMemo(HttpServletRequest request, @RequestBody MemoRequestDto memoRequestDto){
-        return ResponseDto.success(memoService.updateMemo(request, memoRequestDto));
-    }
-
-    @DeleteMapping(value = "/memo/{roomid}")
-    public ResponseDto<?> deleteMemo(@PathVariable String roomId, HttpServletRequest request){
-        return ResponseDto.success(memoService.deleteMemo(request, roomId));
     }
 
 }

@@ -47,7 +47,6 @@ public class KakaoLoginService {
         // 4. 로그인(Jwt토큰 생성)
         Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).get();
         String accessToken = jwtTokenProvider.creatToken(member);
-        System.out.println(accessToken);
 
         // 5. 로그인(Jwt토큰 전달)
         response.addHeader("Authorization","Bearer "+accessToken);
@@ -152,6 +151,5 @@ public class KakaoLoginService {
                 .userRole(Member.Authority.ROLE_USER)
                 .build();
         memberRepository.save(member);
-        System.out.println(properties);
     }
 }
