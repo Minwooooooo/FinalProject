@@ -35,12 +35,9 @@ public class MemoService {
 
         ChatRoom room = roomRepository.findByRoomId(memoRequestDto.getRoomId());
 
-
         Member member = memberService.findMember(request);
 
-
         Memo memo = memoRepository.findByMemberAndRoomId(member, room.getRoomId());
-
 
         if (memo == null) {
             memo = Memo.builder()
@@ -66,18 +63,16 @@ public class MemoService {
         } else {
             memo.updateMemo(memoRequestDto.getContents());
 
+            return MemoDto.builder()
+                    .memberName(member.getMemberName())
+                    .roomName(memo.getRoomName())
+                    .category(memo.getCategory())
+                    .contents(memo.getContents())
+                    .createDate(memo.getCreateDate())
+                    .modifiedDate(memo.getModifiedDate())
+                    .build();
+        }
 
-        return MemoDto.builder()
-                .memberName(member.getMemberName())
-                .roomName(memo.getRoomName())
-                .category(memo.getCategory())
-                .contents(memo.getContents())
-                .createDate(memo.getCreateDate())
-                .modifiedDate(memo.getModifiedDate())
-                .build();
     }
-
-    }
-
 
 }

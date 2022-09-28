@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.responseDto.MemberInfoDto;
 import com.example.demo.dto.responseDto.MemoDto;
 import com.example.demo.dto.responseDto.MypageDto;
+import com.example.demo.dto.responseDto.TimeDto;
 import com.example.demo.entity.Member;
 import com.example.demo.entity.Memo;
 import com.example.demo.entity.StudyTimer;
@@ -30,13 +30,19 @@ public class MypageService {
     private final StudyTimerRepository studyTimerRepository;
 
 
-    //사용자 정보 불러오기(지금은 닉네임만)
-    //사용자 정보 나중에 추가 설정 필요
+    //사용자 정보 전부 가져오기
     @Transactional
-    public MemberInfoDto myInfo(HttpServletRequest request) {
+    public MypageDto myInfo(HttpServletRequest request) {
         Member member = memberService.findMember(request);
-        return MemberInfoDto.builder()
+
+        List<MemoDto> memoDtos = getAllMemo(request);
+
+        List<TimeDto> TimeDtos = allMyTimer(request);
+
+        return MypageDto.builder()
                 .memberName(member.getMemberName())
+                .memoDtoList(memoDtos)
+                .timeDtoList(TimeDtos)
                 .build();
     }
 
@@ -53,11 +59,10 @@ public class MypageService {
         for (Memo memo : memoList) {
             memoDtos.add(
                     MemoDto.builder()
-                            .memberName(member.getMemberName())
                             .roomId(memo.getRoomId())
                             .roomName(memo.getRoomName())
                             .category(memo.getCategory())
-                            .contents(memo.getContents())
+                            .contents(memo.getContents().substring(0,30))
                             .createDate(memo.getCreateDate())
                             .modifiedDate(memo.getModifiedDate())
                             .build()
@@ -76,7 +81,6 @@ public class MypageService {
         Memo memo = memoRepository.findByMemberAndRoomId(member, roomId);
 
         return MemoDto.builder()
-                .memberName(member.getMemberName())
                 .roomName(memo.getRoomName())
                 .category(memo.getCategory())
                 .contents(memo.getContents())
@@ -101,42 +105,36 @@ public class MypageService {
     }
 
 
-    //멤버랑 룸 아이디로 타이머 찾기
-
     //나의 모든 타이머 불러오기
     @Transactional
-    public List<MypageDto> allMyTimer(HttpServletRequest request){
+    public List<TimeDto> allMyTimer(HttpServletRequest request){
         Member member = memberService.findMember(request);
 
-        List<MypageDto> MypageDtos = new ArrayList<>();
+        List<TimeDto> TimeDtos = new ArrayList<>();
         List<StudyTimer> studyTimerList = studyTimerRepository.findAllByMember(member);
 
         for(StudyTimer studyTimer : studyTimerList){
-            MypageDtos.add(
-                    MypageDto.builder()
-                            .memberName(studyTimer.getMember().getMemberName())
-                            .roomId(studyTimer.getRoomId())
+            TimeDtos.add(
+                    TimeDto.builder()
                             .roomName(studyTimer.getRoomName())
                             .category(studyTimer.getCategory())
                             .time(studyTimer.getTime())
                             .build()
             );
         }
-        return MypageDtos;
+        return TimeDtos;
 
     }
 
     //특정 타이머 불러오기
     @Transactional
-    public MypageDto myTimer(HttpServletRequest request, String roomId){
+    public TimeDto myTimer(HttpServletRequest request, String roomId){
         Member member = memberService.findMember(request);
         Optional<StudyTimer> optionalStudyTimer = studyTimerRepository.findByRoomIdAndMember(roomId, member);
 
         StudyTimer studyTimer = optionalStudyTimer.get();
 
-        return MypageDto.builder()
-                .memberName(studyTimer.getMember().getMemberName())
-                .roomId(studyTimer.getRoomId())
+        return TimeDto.builder()
                 .roomName(studyTimer.getRoomName())
                 .category(studyTimer.getCategory())
                 .time(studyTimer.getTime())
