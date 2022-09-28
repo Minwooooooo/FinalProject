@@ -25,12 +25,12 @@ public class CategoryController {
     }
 
     @PutMapping(value = "/categories/{id}")
-    public ResponseDto<?> addStoryScript(@PathVariable Long id, @RequestBody CategoryRequestDto requestDto, HttpServletRequest request){
+    public ResponseDto<?> updateStoryScript(@PathVariable Long id, @RequestBody CategoryRequestDto requestDto, HttpServletRequest request){
         return categoryService.update(id, requestDto, request);
     }
 
     @DeleteMapping(value = "/categories/{id}")
-    public ResponseDto<?> addStoryScript(@PathVariable Long id){
+    public ResponseDto<?> deleteStoryScript(@PathVariable Long id){
         return categoryService.delete(id);
     }
 }
