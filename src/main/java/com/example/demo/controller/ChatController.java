@@ -29,7 +29,6 @@ public class ChatController {
      */
     @MessageMapping("/chat/message")
     public void message(ChatMessage message,@Header("Authorization") String token) {
-        System.out.println(message.getType().toString());
         String nickname = jwtTokenProvider.getMemberNameByToken(token);
         String image = chatHandler.getImageByToken(token);
         chatService.sendChatMessage(message,nickname,image);

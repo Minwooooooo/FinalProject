@@ -26,10 +26,10 @@ public class MemoController {
         return ResponseDto.success(memoService.getMemo(id, roomName));
     }
 
-    @GetMapping(value = "/memo/{id}")
-    public ResponseDto<?> getAllMemo(@PathVariable Long id){
-        return ResponseDto.success(memoService.getAllMemo(id));
-    }
+//    @GetMapping(value = "/memo/{id}")
+//    public ResponseDto<?> getAllMemo(@PathVariable Long id){
+//        return ResponseDto.success(memoService.getAllMemo(id));
+//    }
 
     @PutMapping(value = "/memo/{id}")
     public ResponseDto<?> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto memoRequestDto){

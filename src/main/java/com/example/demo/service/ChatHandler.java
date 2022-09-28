@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class ChatHandler {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ChatBotService chatBotService;
 
     public String getImageByToken(String token) {
         String temp_id = jwtTokenProvider.tempClaim(token).getSubject();
@@ -44,6 +45,17 @@ public class ChatHandler {
             //인원수 -
         }
         else if (chatMessage.getType().equals(chatMessage.getType().TALK)) { // websocket 연결요청
+            String msg=chatMessage.getMessage();
+            if(chatBotService.botCheck(msg)){
+                String new_message= chatBotService.botRunner(chatMessage);
+                temp_msg = MessageDto.builder()
+                        .type(chatMessage.getType().ordinal())
+                        .sender("알리미")
+                        .image("")
+                        .msg(new_message)
+                        .build();
+                return temp_msg;
+            }
             temp_msg = MessageDto.builder()
                     .type(chatMessage.getType().ordinal())
                     .sender(memberName)
