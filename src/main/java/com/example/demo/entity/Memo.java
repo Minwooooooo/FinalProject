@@ -38,6 +38,9 @@ public class Memo extends Timestamped{
     @Column
     private String roomName;
 
+    @Column
+    private String roomId;
+
 
     public void updateMemo(String contents) {
         this.contents = contents;

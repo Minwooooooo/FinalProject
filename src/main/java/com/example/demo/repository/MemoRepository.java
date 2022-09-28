@@ -11,5 +11,5 @@ public interface MemoRepository extends JpaRepository<Memo,String> {
 
     List<Memo> findAllByMember(Member member);
 
-    Memo findByMemberAndRoomName(Member member, String roomName);
+    Memo findByMemberAndRoomId(Member member, String roomId);
 }
