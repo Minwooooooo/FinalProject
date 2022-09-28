@@ -10,7 +10,12 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 public class Category {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+
+    @Column
     private String category;
 
     @Column
@@ -22,12 +27,13 @@ public class Category {
         this.story = requestDto.getStory();
     }
 
-    public void update(String story){
-        this.story= story;
+    public void update(CategoryRequestDto requestDto){
+        this.category = requestDto.getCategory();
+        this.story = requestDto.getStory();
     }
 
 
-//    for test
+    //    for test
     public Category(String category, String story) {
         this.category = category;
         this.story = story;

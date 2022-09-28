@@ -23,4 +23,15 @@ public class CategoryController {
     public ResponseDto<?> addStoryScript(@RequestBody CategoryRequestDto requestDto, HttpServletRequest request){
         return categoryService.saveStory(requestDto, request);
     }
+
+    @PutMapping(value = "/categories/{id}")
+    public ResponseDto<?> addStoryScript(@PathVariable Long id, @RequestBody CategoryRequestDto requestDto, HttpServletRequest request){
+        return categoryService.update(id, requestDto, request);
+    }
+
+    @DeleteMapping(value = "/categories/{id}")
+    public ResponseDto<?> addStoryScript(@PathVariable Long id){
+        return categoryService.delete(id);
+    }
 }
+
