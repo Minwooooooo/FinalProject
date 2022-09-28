@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+@RequestMapping(value = "/auth")
 @RestController
 @RequiredArgsConstructor
 public class MemoController {
