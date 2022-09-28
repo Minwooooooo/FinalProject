@@ -33,11 +33,6 @@ public class MemoController {
     }
 
 
-    @PutMapping(value = "/memo")
-    public ResponseDto<?> updateMemo(HttpServletRequest request, @RequestBody MemoRequestDto memoRequestDto){
-        return ResponseDto.success(memoService.updateMemo(request, memoRequestDto));
-    }
-
     @DeleteMapping(value = "/memo/{roomid}")
     public ResponseDto<?> deleteMemo(@PathVariable String roomId, HttpServletRequest request){
         return ResponseDto.success(memoService.deleteMemo(request, roomId));
