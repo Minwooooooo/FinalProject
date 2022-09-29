@@ -1,0 +1,52 @@
+package com.example.demo.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Entity
+public class RoomDetail {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    private ChatRoom chatRoom;
+
+    @OneToMany
+    private List<Member> enterMembers;
+
+    @OneToMany
+    private List<Member> blackMembers;
+
+    @OneToOne
+    private Member roomManager;
+
+    public static RoomDetail create(ChatRoom chatRoom) {
+        RoomDetail roomDetail = new RoomDetail();
+        roomDetail.chatRoom=chatRoom;
+        return roomDetail;
+    }
+
+
+    public void addMember(Member member) {
+        enterMembers.add(member);
+    }
+
+    public void removeMember(Member member) {
+        enterMembers.remove(member);
+    }
+
+    public void setManager(Member member) {
+        this.roomManager=member;
+    }
+}

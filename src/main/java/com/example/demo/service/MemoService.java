@@ -5,20 +5,14 @@ import com.example.demo.dto.responseDto.MemoDto;
 import com.example.demo.entity.ChatRoom;
 import com.example.demo.entity.Member;
 import com.example.demo.entity.Memo;
-import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.MemoRepository;
 import com.example.demo.repository.RoomRepository;
-import com.example.demo.security.jwt.JwtTokenProvider;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
