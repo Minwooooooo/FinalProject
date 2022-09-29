@@ -20,7 +20,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public ResponseDto<?> SendStories(String category){
-        List<Category> categories = getCategories(category);
+        List<Category> categories = newCategories(category);
 
         CategoryResponseDto responseDto= CategoryResponseDto.builder()
                 .categories(categories)
@@ -31,69 +31,68 @@ public class CategoryService {
 
     @Transactional
     public ResponseDto<?> saveStory(CategoryRequestDto requestDto, HttpServletRequest request){
-        Category category = newCategory(requestDto);
+        Category category = newCategoryCheckedNull(requestDto);
 
         try {
             categoryRepository.save(category);
         }catch (Exception e){
-            return ResponseDto.fail("CANT_SAVE", "Encountering JPA save");
+            System.err.println(e);
+            return ResponseDto.fail("CANT_SAVE", "Encountering JPA save err");
         }
 
-        return ResponseDto.success(category.getId() + ", Save Complete in script");
+        return ResponseDto.success(category.getId() + " : Save Complete in script");
     }
 
     public ResponseDto<?> update(Long id, CategoryRequestDto requestDto, HttpServletRequest request) {
-        Optional<Category> checkNull = getCategoryFindById(id);
-
-        Category category= null;
-        if (checkNull.isPresent()){
-            category = getCategoryById(id);
-        }else {
-            System.err.println("Not Found ID");
-        }
+        Optional<Category> forNullCheck = new NewOptional().findById(id);
+        Category category = getCategoryCheckValidId(id, forNullCheck);
 
         try {
             category.update(requestDto);
             categoryRepository.save(category);
         }catch (Exception e){
-            System.err.println("Encountering Update");
+            System.err.println(e);
+            return ResponseDto.fail("CANT_UPDATE", "Encountering Update");
         }
 
         return ResponseDto.success("Updating Complete");
     }
 
-
     public ResponseDto<?> delete(Long id) {
+        Optional<Category> checkNull = new NewOptional().findById(id);
 
-        Optional<Category> checkNull = getCategoryFindById(id);
         if (checkNull.isPresent()){
             try {
                 categoryRepository.deleteById(id);
             }catch (Exception e){
-                return ResponseDto.fail("DELETE_ERR", "JAP deleteById");
+                return ResponseDto.fail("JAP_deleteById", e + "");
             }
         }else{
-            System.err.println("Not Found a ID");
+            var MSG= "Not Found a ID";
+            System.err.println(MSG);
+            return ResponseDto.fail("NULL_ID", MSG);
         }
 
         return ResponseDto.success("Deleting Complete");
     }
 
-    private Optional<Category> getCategoryFindById(Long id) {
-        var checkNull= categoryRepository.findById(id);
-        return checkNull;
+
+//    Nested class
+    class NewOptional{
+        private Optional<Category> findById(Long id) {
+            return categoryRepository.findById(id);
+        }
     }
 
 
     //    Private
-    private List<Category> getCategories(String category) {
-        Optional<List<Category>> optionalCategoryList= Optional.ofNullable(categoryRepository.findAllByCategory(category));
-        List<Category> categories= optionalCategoryList.orElseThrow(
+    private List<Category> newCategories(String category) {
+        List<Category> categories= Optional.ofNullable(categoryRepository.findAllByCategory(category)).orElseThrow(
                 () -> new IllegalArgumentException("PARSING_ERR")
         );
         return categories;
     }
-    private static Category newCategory(CategoryRequestDto requestDto) {
+    private static Category newCategoryCheckedNull(CategoryRequestDto requestDto) {
         if (requestDto.getCategory().isEmpty()){
             System.err.println("Null Category value");
         }
@@ -101,15 +100,24 @@ public class CategoryService {
             System.err.println("Null story value");
         }
 
-        Category category= new Category(requestDto);
+        return new Category(requestDto);
+    }
+
+    private Category getCategoryByIdAsOptional(Long id) {
+        Category category = categoryRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("PARSING")
+        );
+
         return category;
     }
 
-    private Category getCategoryById(Long id) {
-        Optional<Category> categoryOptional= categoryRepository.findById(id);
-        Category category = categoryOptional.orElseThrow(
-                () -> new IllegalArgumentException("PARSING_ERR")
-        );
+    private Category getCategoryCheckValidId(Long id, Optional<Category> checkNull) {
+        Category category= checkNull.isPresent() ? getCategoryByIdAsOptional(id) : null;
+
+        if (category == null){
+            throw new IllegalArgumentException("Not Found ID");
+        }
+
         return category;
     }
 }
