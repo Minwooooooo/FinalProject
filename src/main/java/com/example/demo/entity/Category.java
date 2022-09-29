@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import com.example.demo.dto.requestDto.CategoryRequestDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +11,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Category {
 
     @Id

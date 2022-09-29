@@ -1,7 +1,9 @@
 package com.example.demo.dummy;
 
 
+import com.example.demo.entity.Category;
 import com.example.demo.entity.ChatRoom;
+import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.RoomRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class AppRunner implements ApplicationRunner {
 
     private final RoomRepository roomRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional

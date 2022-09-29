@@ -51,6 +51,14 @@ public class ChatRoom implements Serializable {
         return chatRoom;
     }
 
+    public void enterMember() {
+        this.memberCount+=1;
+    }
+
+    public void quitMember() {
+        this.memberCount-=1;
+    }
+
     public enum categoryList{
         생활영어, 캠스터디, 시험대비, 스크립트
     }
