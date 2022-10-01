@@ -38,6 +38,11 @@ public class ChatRoom implements Serializable {
     @Column
     private String roomPw;
 
+    @Column
+    private int status; // 0 : 초기상태, 1 : 활성화, 2 : 비활성화
+
+
+
 
     public static ChatRoom create(CreatRoomRequestDto creatRoomRequestDto) {
         ChatRoom chatRoom = new ChatRoom();
@@ -48,7 +53,16 @@ public class ChatRoom implements Serializable {
         chatRoom.memberCount = 0L;
         chatRoom.lock = creatRoomRequestDto.isLock();
         chatRoom.roomPw = creatRoomRequestDto.getRoomPw();
+        chatRoom.status = 0;
         return chatRoom;
+    }
+
+    public void enterMember() {
+        this.memberCount+=1;
+    }
+
+    public void quitMember() {
+        this.memberCount-=1;
     }
 
     public enum categoryList{

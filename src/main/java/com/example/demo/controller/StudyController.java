@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.requestDto.TimerRequestDto;
 import com.example.demo.dto.responseDto.ResponseDto;
-import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

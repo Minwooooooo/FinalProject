@@ -23,4 +23,8 @@ public class Notice {
 
     @Column
     private String notice;
+
+    public void editNotice(String temp_notice) {
+        this.notice=temp_notice;
+    }
 }

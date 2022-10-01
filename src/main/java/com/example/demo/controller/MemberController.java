@@ -1,15 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.requestDto.TimerRequestDto;
 import com.example.demo.dto.responseDto.ResponseDto;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.service.KakaoLoginService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 

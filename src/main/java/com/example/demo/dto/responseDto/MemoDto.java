@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class MemoDto {
+    private String memberName;
     private String roomId;
     private String roomName;
     private String category;

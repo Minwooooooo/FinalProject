@@ -57,12 +57,16 @@ public class MypageService {
         List<Memo> memoList = memoRepository.findAllByMember(member);
 
         for (Memo memo : memoList) {
+            String temp_memo= memo.getContents();
+//            if(memo.getContents().length()>30){
+//                temp_memo=temp_memo.substring(0,30);
+//            }
             memoDtos.add(
                     MemoDto.builder()
                             .roomId(memo.getRoomId())
                             .roomName(memo.getRoomName())
                             .category(memo.getCategory())
-                            .contents(memo.getContents().substring(0,30))
+                            .contents(temp_memo)
                             .createDate(memo.getCreateDate())
                             .modifiedDate(memo.getModifiedDate())
                             .build()

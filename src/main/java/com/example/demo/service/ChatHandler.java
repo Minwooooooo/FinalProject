@@ -49,7 +49,7 @@ public class ChatHandler {
             if(chatBotService.botCheck(msg)){
                 String new_message= chatBotService.botRunner(chatMessage);
                 temp_msg = MessageDto.builder()
-                        .type(chatMessage.getType().ordinal())
+                        .type(3)
                         .sender("알리미")
                         .image("")
                         .msg(new_message)

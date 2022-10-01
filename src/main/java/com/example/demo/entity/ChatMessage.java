@@ -12,7 +12,7 @@ public class ChatMessage {
 
     // 메시지 타입 : 입장, 퇴장, 채팅
     public enum MessageType {
-        ENTER, QUIT, TALK
+        ENTER, QUIT, TALK, NOTICE
     }
 
     private MessageType type; // 메시지 타입

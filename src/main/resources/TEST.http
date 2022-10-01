@@ -11,3 +11,7 @@ accept: */*
   "roomId": "e09e3794-699c-4df8-a650-337219fe0ae3",
   "studyTime": "3000000"
 }
+
+###
+GET http://35.174.109.220:8080/auth/chat/quit/f7c3549e-53c3-4c3e-b336-8588a96c1242
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNDQyNjYzNDEwIiwibmFtZSI6IuuLpOydgCIsImF1dGgiOiJST0xFX1VTRVIifQ.FmLciZy1afVgp5qs7NShDyLwK_K15weiNtMSAmuPCRg
