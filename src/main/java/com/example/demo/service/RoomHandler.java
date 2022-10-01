@@ -26,6 +26,7 @@ public class RoomHandler {
     // 방 입장
     // 방 조회 -> (비밀번호확인) -> 권한 확인 -> 입장 처리
     @Transactional
+    // asdf.com/auth/chat/enter/방id
     public ResponseDto<?> enterRoomHandler(String roomId,HttpServletRequest request){
         // 접속 멤버 조회
         String token= jwtTokenProvider.getToken(request);
@@ -52,14 +53,19 @@ public class RoomHandler {
         if(roomDetail.getBlackMembers().contains(member)){
             return ResponseDto.fail("Bannde_Enter","입장이 금지되었습니다.");
         }
+        try {
+            // 입장 처리-ChatRoom
+            chatRoom.enterMember();
+            // 입장 처리-RoomDetail
+            // 만약 이미 있는 멤버가 추가된다면????
+            roomDetail.addMember(member);
+        }
+        catch (Exception e){
+            return ResponseDto.fail(e.getMessage(),"삐빅 오류");
+        }
 
-        // 입장 처리-ChatRoom
-        chatRoom.enterMember();
-        // 입장 처리-RoomDetail
-        // 만약 이미 있는 멤버가 추가된다면????
-        roomDetail.addMember(member);
 
-        return ResponseDto.success("입장 완료");
+        return ResponseDto.success(chatRoom.getRoomName());
     }
 
     @Transactional

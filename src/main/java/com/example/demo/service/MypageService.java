@@ -58,9 +58,9 @@ public class MypageService {
 
         for (Memo memo : memoList) {
             String temp_memo= memo.getContents();
-            if(memo.getContents().length()>30){
-                temp_memo=temp_memo.substring(0,30);
-            }
+//            if(memo.getContents().length()>30){
+//                temp_memo=temp_memo.substring(0,30);
+//            }
             memoDtos.add(
                     MemoDto.builder()
                             .roomId(memo.getRoomId())

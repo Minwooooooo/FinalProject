@@ -7,8 +7,10 @@ import com.example.demo.repository.NoticeRepository;
 import com.example.demo.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,21 +23,31 @@ public class ChatBotService {
     !공지등록 : 공지 등록(권한 확인후)
     !
      */
+    @Transactional
     public String botRunner(ChatMessage chatMessage){
         String message=chatMessage.getMessage();
+        System.out.println(message.trim());
         ChatRoom chatRoom = roomRepository.findById(chatMessage.getRoomId()).get();
         String new_message = null;
-        if(message.equals("!공지")){
+        if(message.trim().equals("!공지")){
             String get_notice=getNotice(chatRoom);
             new_message=get_notice;
         }
-        else if(message.substring(0,5).equals("!공지등록")){
+
+        else if(message.length()>4&&message.substring(0,5).equals("!공지등록")){
+            Optional<Notice> notice=noticeRepository.findByChatRoom(chatRoom);
             String temp_notice=registNotice(message);
+
+            if(notice.isEmpty()){
             Notice new_notice= Notice.builder()
                     .chatRoom(chatRoom)
                     .notice(temp_notice)
                     .build();
             noticeRepository.save(new_notice);
+            }
+            else {
+                notice.get().editNotice(temp_notice);
+            }
             new_message="<신규 공지>"+temp_notice;
         }
         else {
