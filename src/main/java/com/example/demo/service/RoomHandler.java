@@ -105,16 +105,33 @@ public class RoomHandler {
                     }
 
                     Member newManager = roomDetail.getEnterMembers().get(i + 1);
+                    
                     if (newManager != null) {
                         roomDetail.setManager(newManager);
+
+                        MessageDto messageDto = MessageDto.builder()
+                                        .type(3)
+                                        .sender("알림")
+                                        .image("")
+                                        .msg("방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.")
+                                        .build();
+                        
                         // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
-                        messageSendingOperations.convertAndSend("/sub/chat/room/"+ roomId, "방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.");
+                        messageSendingOperations.convertAndSend("/sub/chat/room/"+ roomId, messageDto);
                     }
                 } else {
                     Member newManager = roomDetail.getEnterMembers().get(i);
                     roomDetail.setManager(newManager);
+
+                    MessageDto messageDto = MessageDto.builder()
+                            .type(3)
+                            .sender("알림")
+                            .image("")
+                            .msg("방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.")
+                            .build();
+                    
                     // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
-                    messageSendingOperations.convertAndSend("/sub/chat/room/"+ roomId, "방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.");
+                    messageSendingOperations.convertAndSend("/sub/chat/room/"+ roomId, messageDto);
                 }
             }
 
