@@ -96,45 +96,26 @@ public class RoomHandler {
 
         //방장이 퇴장시 입장 순으로 방장 세팅
         if (member == roomDetail.getRoomManager()) {
+            
+            // 인원수가 0인 경우
+            if (roomDetail.getEnterMembers().get(0) == null) {
+                
+                roomDetail.setManager(null);
 
-            for (int i = 0; i < roomDetail.getEnterMembers().size(); i++) {
-                if (roomDetail.getEnterMembers().get(i) == null) {
-                    // 모두가 나가거나 방장이 맨 마지막으로 나갔을 경우
-                    if (i == roomDetail.getEnterMembers().size() - 1) {
-                        roomDetail.setManager(null);
-                    }
+            } else {
+                Member newManager = roomDetail.getEnterMembers().get(0);
+                roomDetail.setManager(newManager);
 
-                    Member newManager = roomDetail.getEnterMembers().get(i + 1);
-                    
-                    if (newManager != null) {
-                        roomDetail.setManager(newManager);
+                MessageDto messageDto = MessageDto.builder()
+                        .type(3)
+                        .sender("알림")
+                        .image("")
+                        .msg("방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.")
+                        .build();
 
-                        MessageDto messageDto = MessageDto.builder()
-                                        .type(3)
-                                        .sender("알림")
-                                        .image("")
-                                        .msg("방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.")
-                                        .build();
-                        
-                        // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
-                        messageSendingOperations.convertAndSend("/sub/chat/room/"+ roomId, messageDto);
-                    }
-                } else {
-                    Member newManager = roomDetail.getEnterMembers().get(i);
-                    roomDetail.setManager(newManager);
-
-                    MessageDto messageDto = MessageDto.builder()
-                            .type(3)
-                            .sender("알림")
-                            .image("")
-                            .msg("방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.")
-                            .build();
-                    
-                    // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
-                    messageSendingOperations.convertAndSend("/sub/chat/room/"+ roomId, messageDto);
-                }
+                // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
+                messageSendingOperations.convertAndSend("/sub/chat/room/" + roomId, messageDto);
             }
-
         }
 
         //자동 방 삭제
