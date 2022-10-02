@@ -32,11 +32,11 @@ public class ChatRoomController {
 
     @GetMapping(value = "/enter/{roomId}")
     public ResponseDto<?> enterRoom(@PathVariable String roomId,HttpServletRequest request){
-        return ResponseDto.success(roomHandler.enterRoomHandler(roomId,request));
+        return roomHandler.enterRoomHandler(roomId,request);
     }
 
     @GetMapping(value = "/quit/{roomId}")
     public ResponseDto<?> quitRoom(@PathVariable String roomId,HttpServletRequest request){
-        return ResponseDto.success(roomHandler.quitRoomHandler(roomId,request));
+        return roomHandler.quitRoomHandler(roomId,request);
     }
 }

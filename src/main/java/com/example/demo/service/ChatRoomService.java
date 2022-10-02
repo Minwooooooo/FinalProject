@@ -42,6 +42,7 @@ public class ChatRoomService {
             RoomListResponseDto temp_room= RoomListResponseDto.builder()
                     .roomId(temp_list.get(i).getRoomId())
                     .roomName(temp_list.get(i).getRoomName())
+                    .lock(temp_list.get(i).isLock())
                     .category(temp_list.get(i).getCategory().toString())
                     .maxCount(temp_list.get(i).getMaxEnterMember())
                     .nowCount(temp_list.get(i).getMemberCount())

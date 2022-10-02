@@ -11,6 +11,8 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -21,13 +23,24 @@ public class ChatController {
     private final ChatHandler chatHandler;
 
 
+
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message,@Header("Authorization") String token) {
+    public void message(ChatMessage message,@Header("Authorization") String token) throws IOException {
+
         String nickname = jwtTokenProvider.getMemberNameByToken(token);
         String image = chatHandler.getImageByToken(token);
-        chatService.sendChatMessage(message,nickname,image);
+        //Test
+        String msg = message.getMessage();
+        String text;
+        if(msg.trim().equals("".trim())){
+            text="공백";
+        }
+        else {
+            chatService.sendChatMessage(message,nickname,image);
+        }
+
     }
 }

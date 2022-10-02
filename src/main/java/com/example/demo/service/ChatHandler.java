@@ -44,7 +44,7 @@ public class ChatHandler {
                     .build();
             //인원수 -
         }
-        else if (chatMessage.getType().equals(chatMessage.getType().TALK)) { // websocket 연결요청
+        else if (chatMessage.getType().equals(chatMessage.getType().TALK)||!chatMessage.getMessage().trim().equals("".trim())) { // websocket 연결요청
             String msg=chatMessage.getMessage();
             if(chatBotService.botCheck(msg)){
                 String new_message= chatBotService.botRunner(chatMessage);
