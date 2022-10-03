@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -34,6 +35,8 @@ public class RoomDetail {
     public static RoomDetail create(ChatRoom chatRoom) {
         RoomDetail roomDetail = new RoomDetail();
         roomDetail.chatRoom=chatRoom;
+        roomDetail.enterMembers=new ArrayList<Member>();
+        roomDetail.blackMembers=new ArrayList<Member>();
         return roomDetail;
     }
 
