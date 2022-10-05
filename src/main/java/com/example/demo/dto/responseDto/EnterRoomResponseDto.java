@@ -4,14 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder
-@Setter
 @Getter
-public class RoomListResponseDto {
-    private String roomName;
+@Setter
+@Builder
+public class EnterRoomResponseDto {
     private String roomId;
     private String category;
-    private boolean lock;
-    private Long maxCount;
-    private Long nowCount;
+    private String roomName;
 }
