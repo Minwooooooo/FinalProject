@@ -28,8 +28,7 @@ public class MemberService {
 
         Long id = Long.valueOf(memberId);
 
-        Optional<Member> optionalMember = memberRepository.findById(id);
-        Member member = optionalMember.get();
+        Member member = memberRepository.findById(id).get();
 
         return member;
     }

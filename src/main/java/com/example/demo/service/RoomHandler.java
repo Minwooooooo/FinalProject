@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+
 import com.example.demo.dto.responseDto.*;
 import com.example.demo.entity.ChatRoom;
 import com.example.demo.entity.Member;
@@ -26,7 +27,9 @@ public class RoomHandler {
     private final RoomRepository roomRepository;
     private final RoomDetailRepository roomDetailRepository;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final ChatService chatService;
+
 
     private final SimpMessageSendingOperations messageSendingOperations;
 
@@ -69,7 +72,6 @@ public class RoomHandler {
         try {
             // 입장 처리-ChatRoom
             chatRoom.enterMember();
-
             // 입장 처리-RoomDetail
             // 만약 이미 있는 멤버가 추가된다면????
             roomDetail.addMember(member);
@@ -104,11 +106,62 @@ public class RoomHandler {
         // 퇴장 처리
         chatRoom.quitMember();
         roomDetail.removeMember(member);
+
+
+        if (chatRoom.getMemberCount() <= 0) {
+            chatRoom.setStatus(2); // 비활성화 상태로 변경
+        }
+
+        //방장이 퇴장시 입장 순으로 방장 세팅
+        if (member == roomDetail.getRoomManager()) {
+            
+            // 인원수가 0인 경우
+            if (roomDetail.getEnterMembers().get(0) == null) {
+                
+                roomDetail.setManager(null);
+
+            } else {
+                Member newManager = roomDetail.getEnterMembers().get(0);
+                roomDetail.setManager(newManager);
+
+                MessageDto messageDto = MessageDto.builder()
+                        .type(3)
+                        .sender("알림")
+                        .image("")
+                        .msg("방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.")
+                        .build();
+
+                // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
+                messageSendingOperations.convertAndSend("/sub/chat/room/" + roomId, messageDto);
+            }
+        }
+
+        //자동 방 삭제
+        //deleteRoomHandler(roomId);
         chatService.enterMembers(roomId);
-
-
         return ResponseDto.success("퇴장완료");
     }
+
+
+    //방 삭제
+    @Transactional
+    public ResponseDto<?> deleteRoomHandler(String roomId) {
+
+        // 방조회
+        ChatRoom chatRoom = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("존재하지않는 방입니다."));
+        RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
+                .orElseThrow();
+
+        //방이 비활성화 상태(2)이고 인원수가 0인 경우
+        if (chatRoom.getStatus() == 2 && chatRoom.getMemberCount() == 0) {
+            roomRepository.delete(chatRoom);
+            roomDetailRepository.delete(roomDetail);
+        }
+
+        return ResponseDto.success("방이 삭제되었습니다.");
+    }
+
 
     // 강퇴
     @Transactional
@@ -147,8 +200,6 @@ public class RoomHandler {
         Member manager=roomDetail.getRoomManager();
         return manager.equals(member);
     }
-
-
 
 
 }

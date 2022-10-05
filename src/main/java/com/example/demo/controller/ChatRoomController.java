@@ -33,6 +33,7 @@ public class ChatRoomController {
     // 현재 -> 방입장시 해당 URL redirect
     // 수정 -> 방입장시 로딩페이지 BE 입장 가능여부를 확인해야함
 
+
     @PostMapping(value = "/enter/{roomId}")
     public ResponseDto<?> enterRoom(@PathVariable String roomId, @RequestBody RoomPasswordDto roomPasswordDto, HttpServletRequest request){
         return roomHandler.enterRoomHandler(roomId,roomPasswordDto.getPassword(),request);
@@ -41,5 +42,6 @@ public class ChatRoomController {
     @GetMapping(value = "/quit/{roomId}")
     public ResponseDto<?> quitRoom(@PathVariable String roomId,HttpServletRequest request){
         return roomHandler.quitRoomHandler(roomId,request);
+
     }
 }

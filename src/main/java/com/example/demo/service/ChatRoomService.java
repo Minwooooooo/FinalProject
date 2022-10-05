@@ -4,6 +4,7 @@ package com.example.demo.service;
 import com.example.demo.entity.ChatRoom;
 import com.example.demo.entity.Member;
 import com.example.demo.entity.RoomDetail;
+
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.RoomDetailRepository;
 import com.example.demo.repository.RoomRepository;
@@ -25,7 +26,6 @@ import java.util.List;
 public class ChatRoomService {
 
     private final RoomRepository roomRepository;
-
     private final RoomDetailRepository roomDetailRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
@@ -36,7 +36,6 @@ public class ChatRoomService {
         Long memberId=Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(jwtTokenProvider.getToken(request)).getSubject());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
-
         ChatRoom chatRoom = ChatRoom.create(creatRoomRequestDto);
         RoomDetail roomDetail = RoomDetail.create(chatRoom);
         roomRepository.save(chatRoom);
@@ -48,7 +47,7 @@ public class ChatRoomService {
     // 방 목록
     public List<RoomListResponseDto> roomList() {
         List<RoomListResponseDto> responseDtos = new ArrayList<>();
-        List<ChatRoom> temp_list = roomRepository.findAll();
+        List<ChatRoom> temp_list = roomRepository.findAllByStatusOrStatus(0, 1);
         for (int i = 0; i < temp_list.size(); i++) {
             RoomListResponseDto temp_room= RoomListResponseDto.builder()
                     .roomId(temp_list.get(i).getRoomId())
