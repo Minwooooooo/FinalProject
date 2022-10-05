@@ -4,10 +4,7 @@ import com.example.demo.entity.Member;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,4 +26,5 @@ public class TESTcontroller {
         String token=jwtTokenProvider.creatToken(member);
         return token;
     }
+
 }

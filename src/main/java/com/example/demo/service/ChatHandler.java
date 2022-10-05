@@ -2,8 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.dto.responseDto.MessageDto;
 import com.example.demo.entity.ChatMessage;
+import com.example.demo.entity.ChatRoom;
 import com.example.demo.entity.Member;
+import com.example.demo.entity.RoomDetail;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.RoomDetailRepository;
+import com.example.demo.repository.RoomRepository;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,8 @@ public class ChatHandler {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ChatBotService chatBotService;
+    private final RoomDetailRepository roomDetailRepository;
+    private final RoomRepository roomRepository;
 
     public String getImageByToken(String token) {
         String temp_id = jwtTokenProvider.tempClaim(token).getSubject();
@@ -26,10 +32,15 @@ public class ChatHandler {
 
     public MessageDto ChatTypeHandler(ChatMessage chatMessage, String memberName, String image) {
         MessageDto temp_msg = null;
+        String roomId= chatMessage.getRoomId();
+        ChatRoom chatRoom = roomRepository.findById(roomId)
+                .orElseThrow(()->new RuntimeException("방을 찾을 수 없습니다."));
+        RoomDetail roomDetail=roomDetailRepository.findByChatRoom(chatRoom)
+                .orElseThrow(()->new RuntimeException("방을 찾을 수 없습니다."));
         if (chatMessage.getType().equals(chatMessage.getType().ENTER)) { // websocket 연결요청
             temp_msg = MessageDto.builder()
                     .type(chatMessage.getType().ordinal())
-                    .sender("알림")
+                    .sender(roomDetail.getRoomManager().getId().toString())
                     .image("")
                     .msg(memberName+"님 하잉")
                     .build();
@@ -44,7 +55,7 @@ public class ChatHandler {
                     .build();
             //인원수 -
         }
-        else if (chatMessage.getType().equals(chatMessage.getType().TALK)) { // websocket 연결요청
+        else if (chatMessage.getType().equals(chatMessage.getType().TALK)||!chatMessage.getMessage().trim().equals("".trim())) { // websocket 연결요청
             String msg=chatMessage.getMessage();
             if(chatBotService.botCheck(msg)){
                 String new_message= chatBotService.botRunner(chatMessage);

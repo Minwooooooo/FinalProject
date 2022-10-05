@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+
 import java.util.List;
 
 @Builder
@@ -25,7 +27,8 @@ public class RoomDetail {
     @OneToMany
     private List<Member> enterMembers;
 
-    @OneToMany
+
+    @ManyToMany
     private List<Member> blackMembers;
 
     @OneToOne
@@ -34,6 +37,10 @@ public class RoomDetail {
     public static RoomDetail create(ChatRoom chatRoom) {
         RoomDetail roomDetail = new RoomDetail();
         roomDetail.chatRoom=chatRoom;
+
+        roomDetail.enterMembers=new ArrayList<Member>();
+        roomDetail.blackMembers=new ArrayList<Member>();
+
         return roomDetail;
     }
 
@@ -44,6 +51,10 @@ public class RoomDetail {
 
     public void removeMember(Member member) {
         enterMembers.remove(member);
+    }
+
+    public void vanMember(Member member){
+        blackMembers.add(member);
     }
 
     public void setManager(Member member) {

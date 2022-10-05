@@ -27,42 +27,6 @@ public class AppRunner implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        HttpServletRequest request = null;
-        CreatRoomRequestDto roomRequestDto = CreatRoomRequestDto.builder()
-                .roomName("생활영어TEST")
-                .category("생활영어")
-                .maxEnterMember(6)
-                .lock(false)
-                .roomPw("")
-                .build();
-        chatRoomService.createChatRoom(roomRequestDto,request);
-        roomRequestDto = CreatRoomRequestDto.builder()
-                .roomName("캠스터디TEST")
-                .category("캠스터디")
-                .maxEnterMember(6)
-                .lock(false)
-                .roomPw("")
-                .build();
-        chatRoomService.createChatRoom(roomRequestDto,request);
-        roomRequestDto = CreatRoomRequestDto.builder()
-                .roomName("시험대비TEST")
-                .category("시험대비")
-                .maxEnterMember(6)
-                .lock(false)
-                .roomPw("")
-                .build();
-        chatRoomService.createChatRoom(roomRequestDto,request);
-        roomRequestDto = CreatRoomRequestDto.builder()
-                .roomName("스크립트TEST")
-                .category("스크립트")
-                .maxEnterMember(6)
-                .lock(false)
-                .roomPw("")
-                .build();
-        chatRoomService.createChatRoom(roomRequestDto,request);
-
-
-
 
 // 스크립트,생활영어,시험대비,캠스터디
         Category category1=Category.builder()

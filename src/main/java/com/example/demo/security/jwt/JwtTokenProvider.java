@@ -107,6 +107,12 @@ public class JwtTokenProvider {
         return memberName;
     }
 
+    // Token에서 Id 가져오기
+    public Long getMemberIdByToken(String token){
+        Long memberId=Long.valueOf(tempClaim(token).getSubject());
+        return memberId;
+    }
+
 
 
     // 토큰 유효성 검증
