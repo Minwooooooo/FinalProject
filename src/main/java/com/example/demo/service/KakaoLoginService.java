@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.responseDto.LoginResponseDto;
 import com.example.demo.entity.Member;
 import com.example.demo.repository.MemberRepository;
 
@@ -52,7 +53,12 @@ public class KakaoLoginService {
         response.addHeader("Authorization","Bearer "+accessToken);
         response.addHeader("Member-Name", member.getMemberName());
 
-        return ResponseDto.success(member.getMemberName());
+        LoginResponseDto responseDto = LoginResponseDto.builder()
+                .memberId(member.getId())
+                .memberName(member.getMemberName())
+                .build();
+
+        return ResponseDto.success(responseDto);
     }
     // KakaoToken 받기
     // Kakao developer의 예제를 기반으로 CURL to JAVA 컨버터를 통해서 작성

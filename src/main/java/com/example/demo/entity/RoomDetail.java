@@ -26,7 +26,7 @@ public class RoomDetail {
     @OneToMany
     private List<Member> enterMembers;
 
-    @OneToMany
+    @ManyToMany
     private List<Member> blackMembers;
 
     @OneToOne
@@ -47,6 +47,9 @@ public class RoomDetail {
 
     public void removeMember(Member member) {
         enterMembers.remove(member);
+    }
+    public void vanMember(Member member){
+        blackMembers.add(member);
     }
 
     public void setManager(Member member) {
