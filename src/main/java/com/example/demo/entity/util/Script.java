@@ -28,6 +28,9 @@ public class Script {
     @Column
     private String story;
 
+    @Column
+    private String origin;
+
 
     public Script(CategoryRequestDto requestDto) {
         this.category = requestDto.getCategory();

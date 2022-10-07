@@ -1,6 +1,5 @@
 package com.example.demo.service.Util;
 
-import com.example.demo.dto.CategoryResponseDto;
 import com.example.demo.dto.ResponseDto;
 import com.example.demo.dto.httpDto.requestDto.CategoryRequestDto;
 import com.example.demo.dto.httpDto.responseDto.ScriptResponseDto;
@@ -12,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ScriptService {
 
     private final ScriptRepository scriptRepository;
 
-    public ResponseDto<?> scriptsList(int type){
+    public ResponseDto<?> scriptsList(int type, Optional<String> category1, Optional<String> category2, Optional<String> category3) throws UnsupportedEncodingException {
         /*
         최초 조회 (type): 해당 타입의 모든 카테고리 리스트 및 스크립트 리스트
          */
@@ -31,11 +32,57 @@ public class ScriptService {
         if(scriptList.isEmpty()){
             return ResponseDto.fail("Null_SCRIPT",type+"인 script가 존재하지 않습니다.");
         }
+        System.out.println("시작 "+scriptList.size());
+
+
+
+        if(category1.isPresent()) {
+            List<Script> tag1Checker=new ArrayList<>();
+            String tag1="#"+URLDecoder.decode(category1.get(),"UTF-8");
+            for (int i = 0; i < scriptList.size(); i++) {
+                List<String> temp_categories=categories(scriptList.get(i).getCategory());
+                if(!temp_categories.contains(tag1)){
+                    tag1Checker.add(scriptList.get(i));
+                }
+            }
+            for (int i = 0; i < tag1Checker.size(); i++) {
+                scriptList.remove(tag1Checker.get(i));
+            }
+        }
+
+        if(category2.isPresent()) {
+            List<Script> tag2Checker=new ArrayList<>();
+            String tag2="#"+URLDecoder.decode(category2.get(),"UTF-8");
+            for (int i = 0; i < scriptList.size(); i++) {
+                List<String> temp_categories=categories(scriptList.get(i).getCategory());
+                if(!temp_categories.contains(tag2)){
+                    tag2Checker.add(scriptList.get(i));
+                }
+            }
+            for (int i = 0; i < tag2Checker.size(); i++) {
+                scriptList.remove(tag2Checker.get(i));
+            }
+        }
+
+        if(category3.isPresent()) {
+            List<Script> tag3Checker=new ArrayList<>();
+            String tag3="#"+URLDecoder.decode(category3.get(),"UTF-8");
+            for (int i = 0; i < scriptList.size(); i++) {
+                List<String> temp_categories=categories(scriptList.get(i).getCategory());
+                if(!temp_categories.contains(tag3)){
+                    tag3Checker.add(scriptList.get(i));
+                }
+            }
+            for (int i = 0; i < tag3Checker.size(); i++) {
+                scriptList.remove(tag3Checker.get(i));
+            }
+        }
 
         List<String> categoryList=new ArrayList<>();
         List<ScriptResponseDto> scriptsList = new ArrayList<>();
 
         for (int i = 0; i < scriptList.size(); i++) {
+
             List<String> temp_categories=categories(scriptList.get(i).getCategory());
 
             ScriptResponseDto scriptResponseDto = ScriptResponseDto.builder()
@@ -47,6 +94,7 @@ public class ScriptService {
             for (int j = 0; j < temp_categories.size(); j++) {
                 if(!categoryList.contains(temp_categories.get(j)))
                 categoryList.add(temp_categories.get(j));
+
             }
         }
         ScriptsResponseDto scriptsResponseDto= ScriptsResponseDto.builder()
@@ -55,6 +103,9 @@ public class ScriptService {
                 .build();
         return ResponseDto.success(scriptsResponseDto);
     }
+
+
+
 
     @Transactional
     public ResponseDto<?> saveStory(CategoryRequestDto requestDto, HttpServletRequest request){
@@ -105,7 +156,7 @@ public class ScriptService {
 
     // 카테고리 리스트화
     public List<String> categories(String category){
-        String[] allCategories=category.split(",");
+        String[] allCategories=category.split(" ");
         return new ArrayList<>(Arrays.asList(allCategories));
     }
 
