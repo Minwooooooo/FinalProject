@@ -10,7 +10,7 @@ public interface RoomRepository extends JpaRepository<ChatRoom,String> {
 
     List<ChatRoom> findAll();
 
-    List<ChatRoom> findAllByStatusOrStatus(int status0, int status1);
+    List<ChatRoom> findAllByStatusCheckerOrStatusChecker(int status0, int status1);
 
     ChatRoom findByRoomId(String roomId);
 }

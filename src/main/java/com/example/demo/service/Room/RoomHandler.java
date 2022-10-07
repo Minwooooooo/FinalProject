@@ -52,12 +52,12 @@ public class RoomHandler {
                 .orElseThrow(()->new RuntimeException("존재하지않는 방입니다."));
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow();
-        if(chatRoom.getStatus()==2){
+        if(chatRoom.getStatusChecker()==2){
             return ResponseDto.fail("Deactivated_Room","비활성화된 방입니다.");
         }
 
         //비밀번호 확인
-        if(chatRoom.isLock()){
+        if(chatRoom.isLockChecker()){
             if (!chatRoom.getRoomPw().equals(roomPw)){
                 return ResponseDto.fail("Incorrect_Password","틀린 비밀번호입니다.");
             }
@@ -119,7 +119,7 @@ public class RoomHandler {
         chatRoom.editMember(memberCount);
 
         if (chatRoom.getMemberCount() <= 0) {
-            chatRoom.setStatus(2); // 비활성화 상태로 변경
+            chatRoom.setStatusChecker(2); // 비활성화 상태로 변경
         }
 
         //방장이 퇴장시 입장 순으로 방장 세팅
@@ -147,7 +147,7 @@ public class RoomHandler {
         }
 
         //자동 방 삭제
-        //deleteRoomHandler(roomId);
+//        deleteRoomHandler(roomId);
         chatService.enterMembers(roomId);
         return ResponseDto.success("퇴장완료");
     }
@@ -164,10 +164,12 @@ public class RoomHandler {
                 .orElseThrow();
 
         //방이 비활성화 상태(2)이고 인원수가 0인 경우
-        if (chatRoom.getStatus() == 2 && chatRoom.getMemberCount() == 0) {
+        if (chatRoom.getStatusChecker() == 2 && chatRoom.getMemberCount() == 0) {
             if(roomDetail.getBlackMembers()!=null){
                 for (int i = 0; i <roomDetail.getBlackMembers().size() ; i++) {
-                    roomDetail.getBlackMembers().remove(i);
+                    while (roomDetail.getBlackMembers().size()!=0){
+                        roomDetail.getBlackMembers().remove(0);
+                    }
                 }
             }
             roomDetailRepository.delete(roomDetail);
