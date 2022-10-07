@@ -37,13 +37,14 @@ public class ChatBotService {
         else if(message.length()>4&&message.substring(0,5).equals("!공지등록")){
             Optional<Notice> notice=noticeRepository.findByChatRoom(chatRoom);
             String temp_notice=registNotice(message);
+            System.out.println(chatRoom.getRoomId());
 
             if(notice.isEmpty()){
-            Notice new_notice= Notice.builder()
+            Notice newNotice= Notice.builder()
                     .chatRoom(chatRoom)
                     .notice(temp_notice)
                     .build();
-            noticeRepository.save(new_notice);
+            noticeRepository.save(newNotice);
             }
             else {
                 notice.get().editNotice(temp_notice);

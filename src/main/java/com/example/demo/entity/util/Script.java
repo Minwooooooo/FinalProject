@@ -25,7 +25,7 @@ public class Script {
     @Column
     private String category;
 
-    @Column
+    @Column(length = 3000)
     private String story;
 
     @Column

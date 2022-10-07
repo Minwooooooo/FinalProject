@@ -20,6 +20,7 @@ public class Notice {
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "chat_room_room_id")
     private ChatRoom chatRoom;
 
     @Column
