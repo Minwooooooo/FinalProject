@@ -6,7 +6,7 @@ import com.example.demo.entity.room.ChatRoom;
 import com.example.demo.entity.member.Member;
 import com.example.demo.entity.util.Memo;
 import com.example.demo.repository.util.MemoRepository;
-import com.example.demo.repository.room.RoomRepository;
+import com.example.demo.repository.room.ChatRoomRepository;
 import com.example.demo.service.Member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,14 +21,14 @@ public class MemoService {
 
     private final MemoRepository memoRepository;
 
-    private final RoomRepository roomRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     private final MemberService memberService;
 
     @Transactional
     public MemoDto saveMemo(MemoRequestDto memoRequestDto, HttpServletRequest request) {
 
-        ChatRoom room = roomRepository.findByRoomId(memoRequestDto.getRoomId());
+        ChatRoom room = chatRoomRepository.findByRoomId(memoRequestDto.getRoomId());
 
         Member member = memberService.findMember(request);
 

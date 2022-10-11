@@ -4,13 +4,14 @@ package com.example.demo.service.Room;
 import com.example.demo.dto.ResponseDto;
 import com.example.demo.dto.httpDto.responseDto.EnterRoomResponseDto;
 import com.example.demo.dto.messageDto.MessageDto;
+import com.example.demo.dto.messageDto.responseDto.RoomDetailMessageDto;
 import com.example.demo.dto.messageDto.responseDto.VanMessageDto;
 import com.example.demo.entity.room.ChatRoom;
 import com.example.demo.entity.member.Member;
 import com.example.demo.entity.room.RoomDetail;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.room.RoomDetailRepository;
-import com.example.demo.repository.room.RoomRepository;
+import com.example.demo.repository.room.ChatRoomRepository;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.service.Chat.ChatService;
 import com.example.demo.service.Member.MemberService;
@@ -29,7 +30,7 @@ import java.util.Optional;
 public class RoomHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RoomRepository roomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final RoomDetailRepository roomDetailRepository;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
@@ -48,7 +49,7 @@ public class RoomHandler {
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
 
         // 방조회
-        ChatRoom chatRoom = roomRepository.findById(roomId)
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new RuntimeException("존재하지않는 방입니다."));
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow();
@@ -107,7 +108,7 @@ public class RoomHandler {
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
 
         // 방조회
-        ChatRoom chatRoom = roomRepository.findById(roomId)
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new RuntimeException("존재하지않는 방입니다."));
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow();
@@ -158,7 +159,7 @@ public class RoomHandler {
     public ResponseDto<?> deleteRoomHandler(String roomId) {
 
         // 방조회
-        ChatRoom chatRoom = roomRepository.findById(roomId)
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("존재하지않는 방입니다."));
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow();
@@ -173,7 +174,7 @@ public class RoomHandler {
                 }
             }
             roomDetailRepository.delete(roomDetail);
-            roomRepository.delete(chatRoom);
+            chatRoomRepository.delete(chatRoom);
 
         }
 
@@ -192,7 +193,7 @@ public class RoomHandler {
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
 
         //방 조회
-        ChatRoom chatRoom = roomRepository.findById(roomId)
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new RuntimeException("존재하지않는 방입니다."));
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow();
@@ -210,6 +211,14 @@ public class RoomHandler {
                 .vanId(vanId)
                 .build();
         messageSendingOperations.convertAndSend("/sub/chat/room/"+chatRoom.getRoomId(),vanMessageDto);
+
+        MessageDto messageDto = MessageDto.builder()
+                .type(3)
+                .sender("알림")
+                .image("")
+                .msg(vanMember.getMemberName()+"님이 강퇴되었습니다.")
+                .build();
+
         return ResponseDto.success("강퇴완료");
     }
 
@@ -233,4 +242,45 @@ public class RoomHandler {
     }
 
 
+    //방장위임
+    public void editManager(Long managerId, Long newManagerId, String roomId) {
+        //접속 멤버 조회
+        Member managerMember=memberRepository.findById(managerId)
+                .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
+        Member newManagerMember=memberRepository.findById(newManagerId)
+                .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
+
+
+        //방 조회
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(()->new RuntimeException("존재하지않는 방입니다."));
+        RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
+                .orElseThrow();
+
+        //권한 조회
+        if(checkManager(managerMember,roomDetail)){
+            roomDetail.setManager(newManagerMember);
+
+            MessageDto messageDto = MessageDto.builder()
+                    .type(3)
+                    .sender("알림")
+                    .image("")
+                    .msg("방장이 " + newManagerMember.getMemberName() + "님으로 교체되었습니다.")
+                    .build();
+
+            // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
+            messageSendingOperations.convertAndSend("/sub/chat/room/" + roomId, messageDto);
+
+            RoomDetailMessageDto roomDetailMessageDto= RoomDetailMessageDto.builder()
+                    .type(5)
+                    .managerId(newManagerId)
+                    .maxMember(chatRoom.getMaxEnterMember())
+                    .connectedMember(chatRoom.getMemberCount())
+                    .build();
+            messageSendingOperations.convertAndSend("/sub/chat/room/" + roomId, roomDetailMessageDto);
+        }
+
+
+
+    }
 }

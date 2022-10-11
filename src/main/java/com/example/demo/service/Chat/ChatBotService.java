@@ -2,9 +2,9 @@ package com.example.demo.service.Chat;
 
 import com.example.demo.entity.chat.ChatMessage;
 import com.example.demo.entity.room.ChatRoom;
-import com.example.demo.entity.room.Notice;
-import com.example.demo.repository.room.NoticeRepository;
-import com.example.demo.repository.room.RoomRepository;
+import com.example.demo.entity.room.RoomNotice;
+import com.example.demo.repository.room.RoomNoticeRepository;
+import com.example.demo.repository.room.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +13,11 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ChatBotService {
-    private final RoomRepository roomRepository;
-    private final NoticeRepository noticeRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final RoomNoticeRepository roomNoticeRepository;
     /*
     명령어 모음
     !공지 : 공지확인
@@ -27,7 +28,7 @@ public class ChatBotService {
     public String botRunner(ChatMessage chatMessage){
         String message=chatMessage.getMessage();
         System.out.println(message.trim());
-        ChatRoom chatRoom = roomRepository.findById(chatMessage.getRoomId()).get();
+        ChatRoom chatRoom = chatRoomRepository.findById(chatMessage.getRoomId()).get();
         String new_message = null;
         if(message.trim().equals("!공지")){
             String get_notice=getNotice(chatRoom);
@@ -35,16 +36,16 @@ public class ChatBotService {
         }
 
         else if(message.length()>4&&message.substring(0,5).equals("!공지등록")){
-            Optional<Notice> notice=noticeRepository.findByChatRoom(chatRoom);
+            Optional<RoomNotice> notice= roomNoticeRepository.findByChatRoom(chatRoom);
             String temp_notice=registNotice(message);
             System.out.println(chatRoom.getRoomId());
 
             if(notice.isEmpty()){
-            Notice newNotice= Notice.builder()
+            RoomNotice newRoomNotice = RoomNotice.builder()
                     .chatRoom(chatRoom)
                     .notice(temp_notice)
                     .build();
-            noticeRepository.save(newNotice);
+            roomNoticeRepository.save(newRoomNotice);
             }
             else {
                 notice.get().editNotice(temp_notice);
@@ -76,7 +77,7 @@ public class ChatBotService {
     // 공지조회
     public String getNotice(ChatRoom chatRoom){
         try {
-            String notice=noticeRepository.findByChatRoom(chatRoom).get().getNotice();
+            String notice= roomNoticeRepository.findByChatRoom(chatRoom).get().getNotice();
             return notice;
         }catch (NoSuchElementException e){
             String notice="등록된 공지가 없습니다.";

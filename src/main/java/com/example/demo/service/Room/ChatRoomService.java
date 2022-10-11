@@ -7,7 +7,7 @@ import com.example.demo.entity.room.RoomDetail;
 
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.room.RoomDetailRepository;
-import com.example.demo.repository.room.RoomRepository;
+import com.example.demo.repository.room.ChatRoomRepository;
 import com.example.demo.dto.httpDto.requestDto.CreatRoomRequestDto;
 import com.example.demo.dto.httpDto.responseDto.RoomListResponseDto;
 import com.example.demo.security.jwt.JwtTokenProvider;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomService {
 
-    private final RoomRepository roomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final RoomDetailRepository roomDetailRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
@@ -38,7 +38,7 @@ public class ChatRoomService {
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
         ChatRoom chatRoom = ChatRoom.create(creatRoomRequestDto);
         RoomDetail roomDetail = RoomDetail.create(chatRoom);
-        roomRepository.save(chatRoom);
+        chatRoomRepository.save(chatRoom);
         roomDetailRepository.save(roomDetail);
         roomDetail.setManager(member);
         return chatRoom;
@@ -47,7 +47,7 @@ public class ChatRoomService {
     // 방 목록
     public List<RoomListResponseDto> roomList() {
         List<RoomListResponseDto> responseDtos = new ArrayList<>();
-        List<ChatRoom> temp_list = roomRepository.findAllByStatusCheckerOrStatusChecker(0, 1);
+        List<ChatRoom> temp_list = chatRoomRepository.findAllByStatusCheckerOrStatusChecker(0, 1);
         for (int i = 0; i < temp_list.size(); i++) {
             RoomListResponseDto temp_room= RoomListResponseDto.builder()
                     .roomId(temp_list.get(i).getRoomId())

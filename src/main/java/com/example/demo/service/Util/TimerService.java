@@ -6,7 +6,7 @@ import com.example.demo.entity.room.ChatRoom;
 import com.example.demo.entity.member.Member;
 import com.example.demo.entity.util.StudyTimer;
 import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.repository.room.RoomRepository;
+import com.example.demo.repository.room.ChatRoomRepository;
 import com.example.demo.repository.util.StudyTimerRepository;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class TimerService {
     private final StudyTimerRepository timerRepository;
     private final MemberRepository memberRepository;
 
-    private final RoomRepository roomRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     // 타이머 기록
     @Transactional
@@ -34,7 +34,7 @@ public class TimerService {
         Member member=memberRepository.findById(member_id).get();
 
         // 방 확인
-        ChatRoom chatRoom = roomRepository.findByRoomId(timerRequestDto.getRoomId());
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(timerRequestDto.getRoomId());
 
         // 기존 타이머 여부 확인
         // 생성

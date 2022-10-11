@@ -8,21 +8,23 @@ import com.example.demo.entity.member.Member;
 import com.example.demo.entity.room.RoomDetail;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.room.RoomDetailRepository;
-import com.example.demo.repository.room.RoomRepository;
+import com.example.demo.repository.room.ChatRoomRepository;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatHandler {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ChatBotService chatBotService;
     private final RoomDetailRepository roomDetailRepository;
-    private final RoomRepository roomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final SimpMessageSendingOperations messageSendingOperations;
 
     public String getImageByToken(String token) {
@@ -36,7 +38,7 @@ public class ChatHandler {
     public MessageDto ChatTypeHandler(ChatMessage chatMessage, String memberName, String image) {
         MessageDto temp_msg = null;
         String roomId= chatMessage.getRoomId();
-        ChatRoom chatRoom = roomRepository.findById(roomId)
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new RuntimeException("방을 찾을 수 없습니다."));
         RoomDetail roomDetail=roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow(()->new RuntimeException("방을 찾을 수 없습니다."));

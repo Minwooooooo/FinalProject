@@ -1,6 +1,5 @@
 package com.example.demo.entity.room;
 
-import com.example.demo.entity.room.ChatRoom;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,14 +12,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Entity
-public class Notice {
+public class RoomNotice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "chat_room_room_id")
     private ChatRoom chatRoom;
 
     @Column
