@@ -9,7 +9,7 @@ import com.example.demo.entity.room.ChatRoom;
 import com.example.demo.entity.member.Member;
 import com.example.demo.entity.room.RoomDetail;
 import com.example.demo.repository.room.RoomDetailRepository;
-import com.example.demo.repository.room.RoomRepository;
+import com.example.demo.repository.room.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ChatService {
 
-    private final RoomRepository roomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final SimpMessageSendingOperations messageSendingOperations;
     private final ChatHandler chatHandler;
     private final RoomDetailRepository roomDetailRepository;
@@ -45,7 +45,7 @@ public class ChatService {
     @Transactional
     public void enterMembers(String roomId){
 
-        ChatRoom chatRoom = roomRepository.findById(roomId)
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new RuntimeException("존재하지 않는 방입니다."));
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow(()->new RuntimeException("존재하지 않는 방입니다."));

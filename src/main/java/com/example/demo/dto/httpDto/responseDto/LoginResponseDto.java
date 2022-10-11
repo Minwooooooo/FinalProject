@@ -10,4 +10,5 @@ import lombok.Setter;
 public class LoginResponseDto {
     private Long memberId;
     private String memberName;
+    private String memberImg;
 }

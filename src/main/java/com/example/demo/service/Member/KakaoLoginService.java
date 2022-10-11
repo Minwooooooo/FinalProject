@@ -56,6 +56,7 @@ public class KakaoLoginService {
         LoginResponseDto responseDto = LoginResponseDto.builder()
                 .memberId(member.getId())
                 .memberName(member.getMemberName())
+                .memberImg(member.getProfileImage())
                 .build();
 
         return ResponseDto.success(responseDto);

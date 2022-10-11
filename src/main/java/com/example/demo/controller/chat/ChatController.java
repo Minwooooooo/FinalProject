@@ -45,6 +45,12 @@ public class ChatController {
             roomHandler.vanHandler(memberId,vanId,roomId);
 
         }
+        else if(message.getType().equals(ChatMessage.MessageType.MANAGER)){
+            Long newManagerId=Long.valueOf(message.getMessage());
+            String roomId=message.getRoomId();
+            roomHandler.editManager(memberId,newManagerId,roomId);
+
+        }
 
     }
 }
