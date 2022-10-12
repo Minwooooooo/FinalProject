@@ -39,11 +39,52 @@ public class RoomHandler {
 
     private final SimpMessageSendingOperations messageSendingOperations;
 
+    // rapper method synchronized
+
+    // 1.
+    public synchronized rapperEnterRoomHandler(String roomId, String roomPw, HttpServletRequest request) {
+      enterRoomHandler(roomId, roomPw, request);  
+    }
+
+    // 2. not sure, cuz read-only value checking
+    public void rapperEnterRoomHandler(String roomId, String roomPw, HttpServletRequest request) {
+      synchronized(this){
+        checkMemberIsToken();
+      }  
+      enterRoomHandler(roomIdm, roomPw, request);
+    }
+
+    // 3. Bull shit 
+    public ResponseDto<?> enterRoomHandler2(String roomId, String roomPw, HttpServletRequest request) {
+      synchronized(this){
+        try { 
+          roomDetail.addMember(member);
+          Long memberCount= (long) roomDetail.getEnterMembers().size();
+          chatRoom.editMember(memberCount);
+        } catch (Exception e) {
+          System.out.println(e);
+        }
+      }    
+    }    
+    
+
+
+    private Boolean checkMemberIsToken() {
+        // 접속 멤버 조회
+        // double checked 
+        String token= jwtTokenProvider.getToken(request);
+        Member member= memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(token).getSubject()))
+                .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
+        return (member != null) ? true : false;
+  }
+
     // 방 입장
     // 방 조회 -> (비밀번호확인) -> 권한 확인 -> 입장 처리
     @Transactional
     public ResponseDto<?> enterRoomHandler(String roomId, String roomPw, HttpServletRequest request){
-        // 접속 멤버 조회
+        
+    // 1. extract method
+    // 접속 멤버 조회
         String token= jwtTokenProvider.getToken(request);
         Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(token).getSubject()))
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
@@ -64,6 +105,7 @@ public class RoomHandler {
             }
         }
 
+        // todo - locked user responseDto
         // 권한 확인(인원수)
         if(chatRoom.getMaxEnterMember()< chatRoom.getMemberCount()+1){
             return ResponseDto.fail("Packed_Room","입장 정원을 초과할 수 없습니다.");
