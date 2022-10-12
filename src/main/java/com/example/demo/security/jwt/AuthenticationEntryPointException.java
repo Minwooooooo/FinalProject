@@ -1,7 +1,7 @@
 package com.example.demo.security.jwt;
 
 
-import com.example.demo.dto.responseDto.ResponseDto;
+import com.example.demo.dto.ResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.security.core.AuthenticationException;
