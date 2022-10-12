@@ -49,6 +49,9 @@ public class KakaoLoginService {
         Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).get();
         String accessToken = jwtTokenProvider.creatToken(member);
 
+        //프로필사진 업데이트
+        changeProfileImage(memberInfo);
+
         // 5. 로그인(Jwt토큰 전달)
         response.addHeader("Authorization","Bearer "+accessToken);
         response.addHeader("Member-Name", member.getMemberName());
@@ -159,4 +162,31 @@ public class KakaoLoginService {
                 .build();
         memberRepository.save(member);
     }
+
+
+    //프로필사진 변경
+    @Transactional
+    public void changeProfileImage(JsonObject memberInfo){
+        // Kakao의 경우 이중 객체형태의 정보를 제공하므로 key값이 properties인 Value를 객체로 변환
+        JsonParser jsonParser = new JsonParser();
+        Object obj = jsonParser.parse(memberInfo.get("properties").toString());
+        JsonObject properties = (JsonObject) obj;
+
+
+        // 프로필 사진이 없을시 들어오는 URL 체크 필요
+        String defaultImg = "null";
+        String profileImage=defaultImg;
+        if(properties.get("profile_image")!=null){
+            String temp_profileImage=properties.get("profile_image").toString();
+            profileImage=temp_profileImage.substring(1,temp_profileImage.length()-1);
+        }
+
+        Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).get();
+
+        if(!member.getProfileImage().equals(profileImage)){
+            member.setNewProfileImage(profileImage);
+        }
+
+    }
+
 }

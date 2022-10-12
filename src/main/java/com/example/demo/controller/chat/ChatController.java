@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,10 +24,7 @@ public class ChatController {
     private final RoomHandler roomHandler;
 
 
-
-    /**
-     * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
-     */
+    // websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
     @MessageMapping("/chat/message")
     public void message(ChatMessage message,@Header("Authorization") String token) {
         String nickname = jwtTokenProvider.getMemberNameByToken(token);
@@ -53,4 +51,11 @@ public class ChatController {
         }
 
     }
+
+    //번역
+    @PostMapping("/chat/message/translation")
+    public void translateMessage(String message) {
+        chatService.sendTranslateMessage(message);
+    }
+
 }
