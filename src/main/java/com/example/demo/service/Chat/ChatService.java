@@ -1,6 +1,8 @@
 package com.example.demo.service.Chat;
 
 
+import com.example.demo.dto.ResponseDto;
+import com.example.demo.dto.httpDto.responseDto.TranslationResponseDto;
 import com.example.demo.dto.messageDto.responseDto.EnterMemberDto;
 import com.example.demo.dto.messageDto.responseDto.EnterMemberListDto;
 import com.example.demo.dto.messageDto.MessageDto;
@@ -11,6 +13,9 @@ import com.example.demo.entity.room.RoomDetail;
 import com.example.demo.repository.room.RoomDetailRepository;
 import com.example.demo.repository.room.ChatRoomRepository;
 import com.example.demo.service.translation.ChatTranslateService;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -43,9 +48,24 @@ public class ChatService {
 
 
     // 번역 메세지
-    public String sendTranslateMessage(String message) {
+    public ResponseDto<?> sendTranslateMessage(String message) {
         String TranslateMessage = chatTranslateService.translate(message);
-        return TranslateMessage;
+        JsonParser jsonParser = new JsonParser();
+        Object obj = jsonParser.parse(TranslateMessage);
+        JsonObject temp_response = (JsonObject) obj;
+        try{
+            JsonElement responseElement=temp_response.get("message");
+            System.out.println(responseElement);
+            JsonObject responseObject=(JsonObject) ((JsonObject) responseElement).get("result");
+            System.out.println(responseObject);
+            TranslationResponseDto translationResponseDto=TranslationResponseDto.builder()
+                    .translatedText(responseObject.get("translatedText").toString())
+                    .build();
+            System.out.println(responseObject.get("translatedText").toString());
+            return ResponseDto.success(translationResponseDto);
+        }catch (Exception e){
+            return ResponseDto.fail("Error",e.getMessage());
+        }
     }
 
 

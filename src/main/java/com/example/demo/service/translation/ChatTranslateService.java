@@ -1,6 +1,7 @@
 package com.example.demo.service.translation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -14,11 +15,14 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ChatTranslateService {
+    @Value("${naver.papago.clientId}")String CLIENT_ID;
+
+    @Value("${naver.papago.clientSecret}")String CLIENT_SECRET;
 
 
     public String translate(String message) {
-        String clientId = "q3JOkArVJVqqbVK_0WoA";//애플리케이션 클라이언트 아이디값";
-        String clientSecret = "UBBRGKKNL_";//애플리케이션 클라이언트 시크릿값";
+        String clientId = CLIENT_ID;//애플리케이션 클라이언트 아이디값";
+        String clientSecret = CLIENT_SECRET;//애플리케이션 클라이언트 시크릿값";
 
         String apiURL = "https://openapi.naver.com/v1/papago/n2mt";
         String text;
@@ -32,7 +36,7 @@ public class ChatTranslateService {
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
 
-        String language = languageSensing(message);
+        String language = languageSensing(message,clientId,clientSecret);
         if (language.equals("en")) {
             String responseBody = postEnToKo(apiURL, requestHeaders, text);
             return responseBody;
@@ -126,7 +130,6 @@ public class ChatTranslateService {
             while ((line = lineReader.readLine()) != null) {
                 responseBody.append(line);
             }
-
             return responseBody.toString();
         } catch (IOException e) {
             throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
@@ -134,9 +137,7 @@ public class ChatTranslateService {
     }
 
 
-    public static String languageSensing(String message) {
-        String clientId = "q3JOkArVJVqqbVK_0WoA"; //애플리케이션 클라이언트 아이디값";
-        String clientSecret = "UBBRGKKNL_"; //애플리케이션 클라이언트 시크릿값";
+    public static String languageSensing(String message, String clientId, String clientSecret) {
 
         String query;
         try {
@@ -147,7 +148,7 @@ public class ChatTranslateService {
         String apiURL = "https://openapi.naver.com/v1/papago/detectLangs";
 
         Map<String, String> requestHeaders = new HashMap<>();
-        requestHeaders.put("X-Naver-Client-Id", clientId);
+        requestHeaders.put("X-Naver-Client-Id",clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
 
         String responseBody = post(apiURL, requestHeaders, query);

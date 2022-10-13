@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -52,10 +51,5 @@ public class ChatController {
 
     }
 
-    //번역
-    @PostMapping("/chat/message/translation")
-    public void translateMessage(String message) {
-        chatService.sendTranslateMessage(message);
-    }
 
 }
