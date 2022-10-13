@@ -18,7 +18,9 @@ public class MemoController {
 
     @PostMapping(value = "/memo")
     public ResponseDto<?> saveMemo(@RequestBody MemoRequestDto memoRequestDto, HttpServletRequest request){
-        return ResponseDto.success(memoService.saveMemo(memoRequestDto,request));
+      // value checking
+      preventSqlToCheckCollection(memoRequestDto);
+      return ResponseDto.success(memoService.saveMemo(memoRequestDto,request));
     }
 
 }

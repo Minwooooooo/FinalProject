@@ -21,6 +21,9 @@ public class MypageController {
 
     @GetMapping(value = "/memo/{roomid}")
     public ResponseDto<?> getMemo(HttpServletRequest request, @PathVariable String roomId){
+    // todo value checking
+      preventSqlTocheck(roomId);  
+
         return ResponseDto.success(mypageService.getMemo(request, roomId));
     }
 
@@ -33,7 +36,10 @@ public class MypageController {
 
     @DeleteMapping(value = "/memo/{roomid}")
     public ResponseDto<?> deleteMemo(@PathVariable String roomId, HttpServletRequest request){
-        return ResponseDto.success(mypageService.deleteMemo(request, roomId));
+     // todo value checking
+      preventSqlTocheck(roomId);  
+
+     return ResponseDto.success(mypageService.deleteMemo(request, roomId));
     }
 
     @GetMapping(value = "/timer")
@@ -43,7 +49,10 @@ public class MypageController {
 
     @GetMapping(value = "/timer/{roomid}")
     public ResponseDto<?> getTimer(HttpServletRequest request, @PathVariable String roomId){
-        return ResponseDto.success(mypageService.myTimer(request, roomId));
+   // todo value checking
+      preventSqlTocheck(roomId);  
+
+       return ResponseDto.success(mypageService.myTimer(request, roomId));
     }
 
 }
