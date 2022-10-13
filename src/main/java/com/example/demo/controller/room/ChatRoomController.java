@@ -36,7 +36,7 @@ public class ChatRoomController {
 
     @PostMapping(value = "/enter/{roomId}")
     public ResponseDto<?> enterRoom(@PathVariable String roomId, @RequestBody RoomPasswordDto roomPasswordDto, HttpServletRequest request){
-        return roomHandler.enterRoomHandler(roomId,roomPasswordDto.getPassword(),request);
+        return roomHandler.rapperEnterRoomHandler(roomId,roomPasswordDto.getPassword(),request);
     }
 
     @GetMapping(value = "/quit/{roomId}")

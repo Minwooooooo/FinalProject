@@ -40,60 +40,28 @@ public class RoomHandler {
     private final SimpMessageSendingOperations messageSendingOperations;
 
     // rapper method synchronized
-
-    // 1.
-    public synchronized rapperEnterRoomHandler(String roomId, String roomPw, HttpServletRequest request) {
-      enterRoomHandler(roomId, roomPw, request);  
-    }
-
-    // 2. not sure, cuz read-only value checking
-    public void rapperEnterRoomHandler(String roomId, String roomPw, HttpServletRequest request) {
-      synchronized(this){
-        checkMemberIsToken();
-      }  
-      enterRoomHandler(roomIdm, roomPw, request);
-    }
-
-    // 3. Bull shit 
-    public ResponseDto<?> enterRoomHandler2(String roomId, String roomPw, HttpServletRequest request) {
-      synchronized(this){
-        try { 
-          roomDetail.addMember(member);
-          Long memberCount= (long) roomDetail.getEnterMembers().size();
-          chatRoom.editMember(memberCount);
-        } catch (Exception e) {
-          System.out.println(e);
+    public ResponseDto<?> rapperEnterRoomHandler(String roomId, String roomPw, HttpServletRequest request) {
+        ResponseDto<?> responseDto= null;
+        synchronized(this){
+            responseDto= enterRoomHandler(roomId, roomPw, request);
         }
-      }    
-    }    
-    
 
+        return responseDto;
+    }
 
-    private Boolean checkMemberIsToken() {
-        // 접속 멤버 조회
-        // double checked 
-        String token= jwtTokenProvider.getToken(request);
-        Member member= memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(token).getSubject()))
-                .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
-        return (member != null) ? true : false;
-  }
 
     // 방 입장
     // 방 조회 -> (비밀번호확인) -> 권한 확인 -> 입장 처리
     @Transactional
     public ResponseDto<?> enterRoomHandler(String roomId, String roomPw, HttpServletRequest request){
-        
-    // 1. extract method
-    // 접속 멤버 조회
-        String token= jwtTokenProvider.getToken(request);
-        Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(token).getSubject()))
-                .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
+        // 접속 멤버 조회
+        Member member= getMember(request);
 
         // 방조회
-        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
-                .orElseThrow(()->new RuntimeException("존재하지않는 방입니다."));
+        ChatRoom chatRoom= getChatRoom(roomId);
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow();
+
         if(chatRoom.getStatusChecker()==2){
             return ResponseDto.fail("Deactivated_Room","비활성화된 방입니다.");
         }
@@ -132,6 +100,7 @@ public class RoomHandler {
         catch (Exception e){
             return ResponseDto.fail(e.getMessage(),"삐빅 오류");
         }
+
         EnterRoomResponseDto responseDto = EnterRoomResponseDto.builder()
                 .roomId(chatRoom.getRoomId())
                 .category(chatRoom.getCategory())
@@ -139,6 +108,18 @@ public class RoomHandler {
                 .build();
 
         return ResponseDto.success(responseDto);
+    }
+
+    private ChatRoom getChatRoom(String roomId) {
+        return chatRoomRepository.findById(roomId)
+                .orElseThrow(()->new RuntimeException("존재하지않는 방입니다."));
+    }
+
+    private Member getMember(HttpServletRequest request) {
+        return memberRepository.findById(
+                    Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(jwtTokenProvider.getToken(request)).getSubject())
+                )
+                .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
     }
 
     //방 퇴장
