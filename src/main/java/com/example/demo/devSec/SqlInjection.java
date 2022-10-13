@@ -1,28 +1,31 @@
 package com.example.demo.devSec;
 
-public class SqlInjection {
-  public static void preventSqlToCheck(String str) throw RuntimeException {
-    // do check
-    if (isRisky) {  
-      // '' @ ^ * ^ % & etc blocked
-    }else{
-      throw new RuntimeException("is so risky");
-    }
 
-    return;
+import java.util.Collections;
+
+public class SqlInjection {
+  public static void preventSqlToCheck(String str) throws RuntimeException {
+    // '' @ ^ * | < > & etc blocked
+
+    // Ex
+    if (str.contain(`)) { 
+      throw new RuntimeException("'");
+    }else if (str.contain("|")) {
+      throw new RuntimeException("|"); 
+    }else if{
+      // .....
+    }
   }
 
-  public static void preventSqlToCheckCollection(Collection Collection) throw RuntimeException {
-    Iterator iter= Collection.Iterator();
-    
-    for (var element : iter) {
-      if (condition.classType("String")) {
-        // Do check 
-      }eles{
-        throw new RuntimeException("is so risky");
+
+  public static void preventSqlToCheckCollection(Collections collection) throws RuntimeException {
+    Iterable iterable= (Iterable) collection;
+    for (var element : iterable) {
+      if (element.getClass().getTypeName().equals("java.lang.String")) {
+        // Do check
+        preventSqlToCheck(element);
       }
     }
-
-    return;
   }
 }
+
