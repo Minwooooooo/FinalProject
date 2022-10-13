@@ -12,4 +12,6 @@ public class MessageDto {
     private String sender;
     private String msg;
     private String image;
+    private String chatDate;
+    private String chatTime;
 }

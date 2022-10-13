@@ -6,10 +6,11 @@ import com.example.demo.entity.util.Memo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemoRepository extends JpaRepository<Memo,Long> {
 
     List<Memo> findAllByMember(Member member);
 
-    Memo findByMemberAndRoomId(Member member, String roomId);
+    Optional<Memo> findByMemberAndRoomId(Member member, String roomId);
 }

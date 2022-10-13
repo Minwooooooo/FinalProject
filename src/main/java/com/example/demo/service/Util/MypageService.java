@@ -59,9 +59,6 @@ public class MypageService {
 
         for (Memo memo : memoList) {
             String temp_memo= memo.getContents();
-//            if(memo.getContents().length()>30){
-//                temp_memo=temp_memo.substring(0,30);
-//            }
             memoDtos.add(
                     MemoDto.builder()
                             .roomId(memo.getRoomId())
@@ -83,7 +80,11 @@ public class MypageService {
 
         Member member = memberService.findMember(request);
 
-        Memo memo = memoRepository.findByMemberAndRoomId(member, roomId);
+        Optional<Memo> temp_memo = memoRepository.findByMemberAndRoomId(member, roomId);
+        Memo memo=null;
+        if(temp_memo.isPresent()){
+            memo=temp_memo.get();
+        }
 
         return MemoDto.builder()
                 .roomName(memo.getRoomName())
@@ -101,7 +102,8 @@ public class MypageService {
 
         Member member = memberService.findMember(request);
 
-        Memo memo = memoRepository.findByMemberAndRoomId(member, roomId);
+        Memo memo = memoRepository.findByMemberAndRoomId(member, roomId)
+                .orElseThrow();
         memoRepository.delete(memo);
         return MemoDto.builder()
                 .roomName(memo.getRoomName())

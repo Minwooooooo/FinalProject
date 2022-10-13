@@ -9,9 +9,11 @@ import com.example.demo.dto.messageDto.responseDto.VanMessageDto;
 import com.example.demo.entity.room.ChatRoom;
 import com.example.demo.entity.member.Member;
 import com.example.demo.entity.room.RoomDetail;
+import com.example.demo.entity.room.RoomNotice;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.room.RoomDetailRepository;
 import com.example.demo.repository.room.ChatRoomRepository;
+import com.example.demo.repository.room.RoomNoticeRepository;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.service.Chat.ChatService;
 import com.example.demo.service.Member.MemberService;
@@ -33,7 +35,7 @@ public class RoomHandler {
     private final ChatRoomRepository chatRoomRepository;
     private final RoomDetailRepository roomDetailRepository;
     private final MemberRepository memberRepository;
-    private final MemberService memberService;
+    private final RoomNoticeRepository roomNoticeRepository;
     private final ChatService chatService;
 
 
@@ -135,50 +137,60 @@ public class RoomHandler {
                 Member newManager = roomDetail.getEnterMembers().get(0);
                 roomDetail.setManager(newManager);
 
+                // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
                 MessageDto messageDto = MessageDto.builder()
                         .type(3)
                         .sender("알림")
                         .image("")
                         .msg("방장이 " + newManager.getMemberName() + "님으로 교체되었습니다.")
                         .build();
-
-                // "방장이 newManager님으로 교체되었습니다." 공지 띄우기
                 messageSendingOperations.convertAndSend("/sub/chat/room/" + roomId, messageDto);
+
+                //바뀐방장 정보보내기
+                RoomDetailMessageDto roomDetailMessageDto= RoomDetailMessageDto.builder()
+                        .type(5)
+                        .managerId(roomDetail.getRoomManager().getId())
+                        .maxMember(chatRoom.getMaxEnterMember())
+                        .connectedMember(chatRoom.getMemberCount())
+                        .build();
+                messageSendingOperations.convertAndSend("/sub/chat/room/" + roomId, roomDetailMessageDto);
             }
         }
 
         //자동 방 삭제
-//        deleteRoomHandler(roomId);
-        chatService.enterMembers(roomId);
+        if(!deleteRoomHandler(roomId)){
+            chatService.enterMembers(roomId);
+        }
         return ResponseDto.success("퇴장완료");
     }
 
 
     //방 삭제
     @Transactional
-    public ResponseDto<?> deleteRoomHandler(String roomId) {
+    public Boolean deleteRoomHandler(String roomId) {
 
         // 방조회
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("존재하지않는 방입니다."));
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow();
+        Optional<RoomNotice> roomNotice = roomNoticeRepository.findByChatRoom(chatRoom);
 
         //방이 비활성화 상태(2)이고 인원수가 0인 경우
         if (chatRoom.getStatusChecker() == 2 && chatRoom.getMemberCount() == 0) {
+
             if(roomDetail.getBlackMembers()!=null){
-                for (int i = 0; i <roomDetail.getBlackMembers().size() ; i++) {
-                    while (roomDetail.getBlackMembers().size()!=0){
-                        roomDetail.getBlackMembers().remove(0);
-                    }
+                while (roomDetail.getBlackMembers().size()!=0) {
+                    roomDetail.getBlackMembers().remove(0);
                 }
             }
+            roomNotice.ifPresent(roomNoticeRepository::delete);
+
             roomDetailRepository.delete(roomDetail);
             chatRoomRepository.delete(chatRoom);
-
+            return true;
         }
-
-        return ResponseDto.success("방이 삭제되었습니다.");
+        return false;
     }
 
 

@@ -35,9 +35,7 @@ public class ChatService {
     // 채팅방에 메시지 발송
     public void sendChatMessage(ChatMessage chatMessage,String memberName,String image) {
         MessageDto messageDto=chatHandler.ChatTypeHandler(chatMessage,memberName,image);
-        System.out.println(memberName+"ChatService");
         messageSendingOperations.convertAndSend("/sub/chat/room/"+chatMessage.getRoomId(),messageDto);
-        System.out.println(chatMessage.getType());
         if (chatMessage.getType().equals(ChatMessage.MessageType.ENTER)){
             enterMembers(chatMessage.getRoomId());
         }
@@ -54,7 +52,6 @@ public class ChatService {
     //접속중인 멤버 WebSocket으로 보내기
     @Transactional
     public void enterMembers(String roomId){
-
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new RuntimeException("존재하지 않는 방입니다."));
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)

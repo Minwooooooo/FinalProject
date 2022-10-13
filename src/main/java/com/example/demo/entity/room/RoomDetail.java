@@ -25,11 +25,11 @@ public class RoomDetail {
     @OneToOne
     private ChatRoom chatRoom;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private List<Member> enterMembers;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Member> blackMembers;
 
     @OneToOne
