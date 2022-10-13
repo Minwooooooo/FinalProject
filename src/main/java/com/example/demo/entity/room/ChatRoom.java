@@ -38,8 +38,6 @@ public class ChatRoom{
     private int statusChecker; // 0 : 초기상태, 1 : 활성화, 2 : 비활성화
 
 
-
-
     public static ChatRoom create(CreatRoomRequestDto creatRoomRequestDto) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();

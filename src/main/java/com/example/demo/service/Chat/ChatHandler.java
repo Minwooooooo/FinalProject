@@ -15,6 +15,8 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,9 @@ public class ChatHandler {
                 .orElseThrow(()->new RuntimeException("방을 찾을 수 없습니다."));
         RoomDetail roomDetail=roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow(()->new RuntimeException("방을 찾을 수 없습니다."));
+
+        String[] chatTimeDto=chatTime();
+
         if (chatMessage.getType().equals(ChatMessage.MessageType.ENTER)) { // websocket 연결요청
             temp_msg = MessageDto.builder()
                     .type(chatMessage.getType().ordinal())
@@ -93,8 +98,31 @@ public class ChatHandler {
                     .sender(memberName)
                     .image(image)
                     .msg(chatMessage.getMessage())
+                    .chatDate(chatTimeDto[0])
+                    .chatTime(chatTimeDto[1])
                     .build();
         }
         return temp_msg;
+    }
+
+    private String[] chatTime(){
+        Date date=new Date();
+        int month=date.getMonth()+1;
+        int day=date.getDate();
+        int temp_hour=date.getHours();
+        String hour = null;
+        if (temp_hour<12){
+            hour="오전 "+temp_hour;
+        }
+        if(temp_hour>=12){
+            hour="오후 "+(temp_hour-12);
+        }
+        int minute=date.getMinutes();
+        String chatDate=month+"월 "+day+"일";
+        String chatTime=hour+":"+minute;
+        String[] chatTimeDto=new String[2];
+        chatTimeDto[0]=chatDate;
+        chatTimeDto[1]=chatTime;
+        return chatTimeDto;
     }
 }
