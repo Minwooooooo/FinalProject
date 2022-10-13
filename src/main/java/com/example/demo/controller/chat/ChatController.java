@@ -55,7 +55,10 @@ public class ChatController {
     //번역
     @PostMapping("/chat/message/translation")
     public void translateMessage(String message) {
-        chatService.sendTranslateMessage(message);
+      // value chaking
+      preventSqlTocheck(message);
+
+      chatService.sendTranslateMessage(message);
     }
 
 }

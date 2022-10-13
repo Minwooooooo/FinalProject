@@ -15,6 +15,9 @@ public class StudyController {
 
     @RequestMapping(value = "/auth/timer",method = RequestMethod.POST)
     public ResponseDto<?> timer(@RequestBody TimerRequestDto timerRequestDto, HttpServletRequest request){
-        return timerService.StudyTimer(timerRequestDto,request);
+     // todo checking value 
+      preventSqlTocheck(timerRequestDto);
+
+      return timerService.StudyTimer(timerRequestDto,request);
     }
 }

@@ -23,11 +23,20 @@ public class ScriptController {
                                          @PathVariable Optional<String> category1,
                                          @PathVariable Optional<String> category2,
                                          @PathVariable Optional<String> category3) throws UnsupportedEncodingException {
-        return scriptService.scriptsList(type,category1,category2,category3);
+        // todo value checking
+      preventSqlTocheck(category1.get());  
+      preventSqlTocheck(category2.get());  
+      preventSqlTocheck(category3.get());  
+  
+      return scriptService.scriptsList(type,category1,category2,category3);
     }
 
     @GetMapping(value = "/admin/script/{key}")
     public void scriptRunner(@PathVariable String key){
+      
+      // todo value checking
+      preventSqlTocheck(key);  
+
         scriptDummy.setScript(key);
     }
 }

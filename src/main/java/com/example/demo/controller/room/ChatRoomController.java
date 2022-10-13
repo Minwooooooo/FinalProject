@@ -20,6 +20,9 @@ public class ChatRoomController {
 
     @PostMapping(value = "/room")
     public ResponseDto<?> creatRoom(@RequestBody CreatRoomRequestDto creatRoomRequestDto, HttpServletRequest request){
+        // inpute value checking
+        preventSqlToCheckCollection(creatRoomRequestDto); 
+
         String roomId=chatRoomService.createChatRoom(creatRoomRequestDto,request).getRoomId();
         String roomPw=creatRoomRequestDto.getRoomPw();
         return roomHandler.enterRoomHandler(roomId,roomPw,request);
@@ -36,12 +39,17 @@ public class ChatRoomController {
 
     @PostMapping(value = "/enter/{roomId}")
     public ResponseDto<?> enterRoom(@PathVariable String roomId, @RequestBody RoomPasswordDto roomPasswordDto, HttpServletRequest request){
-        return roomHandler.enterRoomHandler(roomId,roomPasswordDto.getPassword(),request);
+      // value checking
+      preventSqlToCheck(roomId);
+        
+      return roomHandler.enterRoomHandler(roomId,roomPasswordDto.getPassword(),request);
     }
 
     @GetMapping(value = "/quit/{roomId}")
     public ResponseDto<?> quitRoom(@PathVariable String roomId,HttpServletRequest request){
-        return roomHandler.quitRoomHandler(roomId,request);
+      // value checking
+      preventSqlToCheck(roomId);
 
+      return roomHandler.quitRoomHandler(roomId,request);
     }
 }
