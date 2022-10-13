@@ -29,4 +29,9 @@ public class Member {
     public enum Authority {
         ROLE_USER,ROLE_ADMIN,ROLE_BLACK
     }
+
+    public void setNewProfileImage(String url){
+        this.profileImage = url;
+    }
+
 }

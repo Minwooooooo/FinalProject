@@ -10,6 +10,7 @@ import com.example.demo.entity.member.Member;
 import com.example.demo.entity.room.RoomDetail;
 import com.example.demo.repository.room.RoomDetailRepository;
 import com.example.demo.repository.room.ChatRoomRepository;
+import com.example.demo.service.translation.ChatTranslateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class ChatService {
     private final SimpMessageSendingOperations messageSendingOperations;
     private final ChatHandler chatHandler;
     private final RoomDetailRepository roomDetailRepository;
+    private final ChatTranslateService chatTranslateService;
 
 
 
@@ -38,6 +40,14 @@ public class ChatService {
             enterMembers(chatMessage.getRoomId());
         }
     }
+
+
+    // 번역 메세지
+    public String sendTranslateMessage(String message) {
+        String TranslateMessage = chatTranslateService.translate(message);
+        return TranslateMessage;
+    }
+
 
     //접속중인 멤버 WebSocket으로 보내기
     @Transactional
