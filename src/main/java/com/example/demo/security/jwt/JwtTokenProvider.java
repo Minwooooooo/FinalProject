@@ -92,13 +92,6 @@ public class JwtTokenProvider {
         return null;
     }
 
-    // Request에서 이름 가져오기
-    public String getMemberName(HttpServletRequest request){
-        String token = getToken(request);
-        String memberName=tempClaim(token).get("name").toString();
-        return memberName;
-    }
-
     // Token에서 이름 가져오기
     public String getMemberNameByToken(String token){
         String memberName=tempClaim(token).get("name").toString();
