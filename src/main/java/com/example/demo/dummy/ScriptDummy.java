@@ -19,6 +19,7 @@ public class ScriptDummy {
         if(key.equals(Secret)){
             setScript2();
             setScript3();
+            setScript4();
         }
     }
 
@@ -808,6 +809,298 @@ public class ScriptDummy {
                 .build();
         scriptRepository.save(script);
 
+    }
+    
+    
+    @Transactional
+    public void setScript4() {
+        Script script;
+        script = Script.builder()
+                .type(4)
+                .category("#영화 #친구 #티격태격 #우정 #라이벌")
+                .story("- A: This isn’t over yet. This is a long weekend.\n" +
+                        "    - 이거 끝난 거 아니야. 이번 주말 아직 많이 남았다고.\n" +
+                        "\n- B: You better watch your back. Ladies.\n" +
+                        "    - 뒤통수 조심하는 게 좋을거야. 얘들아.\n" +
+                        "\n- C: I can’t believe you guys just did that to the Vandergelds. You know, they could take you off the scene just like that.\n" +
+                        "    - 너희들이 방금 Vandergeld 자매한테 저랬다는 걸 믿을 수가 없어. 왜, 쟤네는 순식간에 너네가 이 바닥에서 얼굴도 못 들게 만들 수 있단 말야.\n" +
+                        "\n- D: Yeah, but it was so cool, you guys.\n" +
+                        "    - 맞아, 하지만 너무 멋있었어, 너희.\n" +
+                        "\n- C: So cool!\n" +
+                        "    - 짱 멋있어!")
+                .origin("출처: 화이트 칙스(White Chicks)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#영화 #작전 #명령 #보고")
+                .story("- A: Everyone, stay calm. We’re taking over the ship.\n" +
+                        "    - 여러분, 진정하라고. 이 배는 우리가 접수하지.\n" +
+                        "\n- B: Aye! Avast!\n" +
+                        "    - 옳소! 동작 그만!\n" +
+                        "\n- C: This ship cannot be crewed by two men. You’ll never make it out of the bay.\n" +
+                        "    - 이 배는 두 사람이서 조종할 수 없을 거요. 아마 항구도 못 벗어나겠지.\n" +
+                        "\n- A: Son, I’m Captain Jack Sparrow. Savvy?\n" +
+                        "    - 얘, 나  Jack Sparrow 선장이야. 알겠느냐?\n" +
+                        "\n- C: Commodore! Sir, they’re taking the Dauntless!\n" +
+                        "    - 준장님! 준장님, 저들이 Dauntless를 가져가고 있습니다!\n" +
+                        "\n- D: Rash, Turner. Too rash.\n" +
+                        "    - 성급하다, Turner. 성급해.\n" +
+                        "\n- C: Sparrow and Turner! They’re taking the Dauntless!\n" +
+                        "    - Sparrow와 Turner이에요! 저들이 Dauntless를 가져가고 있어요!\n" +
+                        "\n- D: That is, without doubt, the worst pirate I have ever seen.\n" +
+                        "    - 의심할 여지없이, 내가 본 최악의 해적이야.\n" +
+                        "\n- B: Here they come.\n" +
+                        "    - 온다.")
+                .origin("출처: 캐리비안의 해적- 블랙펄의 저주 (Pirates Of The Caribbean: The Curse Of The Black Pearl)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#애니메이션 #친구 #놀이공원 ")
+                .story("- A: This ride better be good.\n" +
+                        "    - 이 놀이기구 재미없기만 해봐.\n" +
+                        "\n- B: Yeah, this line is way too long.\n" +
+                        "    - 맞아, 줄이 너무 길어.\n" +
+                        "\n- C: I think we’re almost to the end.\n" +
+                        "    - 거의 다 온 것 같아.\n" +
+                        "\n- A: We better be, we’ve been in line for almost an hour!\n" +
+                        "    - 그래야지. 우리 거의 한 시간 동안 줄 서 있었어!\n" +
+                        "\n- B: Here we go.\n" +
+                        "    - 이제 간다.\n" +
+                        "\n- C: Finally!\n" +
+                        "    - 드디어!\n" +
+                        "\n- D: Did you enjoy the ride?\n" +
+                        "    - 놀이기구 잘 타셨나요?\n" +
+                        "\n- A: What ride?\n" +
+                        "    - 무슨 놀이기구요?\n" +
+                        "\n- B: Yeah!\n" +
+                        "    - 맞아요!\n" +
+                        "\n- D: This was the Line Ride. A real life simulator of a long line.\n" +
+                        "    - 이건 줄 서기 놀이기구예요. 아주 긴 줄의 현실 체험판이랍니다.\n" +
+                        "\n- C:Ah, you gotta be kidding me.\n" +
+                        "    - 아, 장난하지 마세요.\n" +
+                        "\n- D: That’s three tickets, thank you very much. Come see us again soon!\n" +
+                        "    - 티켓 세 장 되겠습니다. 감사합니다. 또 놀러오세요!")
+                .origin("출처: 사우스 파크(South Park)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#영화 #소개")
+                .story("- A: Nick tells me you’re a professor, too.\n" +
+                        "    - Nick한테 들었어요. 아가씨도 교수라면서요.\n" +
+                        "\n- B: What do you teach?\n" +
+                        "    - 어떤 걸 가르치죠?\n" +
+                        "\n- C: Um, I teach economics.\n" +
+                        "    - 어, 전 경제학을 가르쳐요.\n" +
+                        "\n- D: And she’s brilliant.\n" +
+                        "    - 정말 능력 있어요.\n" +
+                        "\n- D: NYU’s youngest faculty member.\n" +
+                        "    - NYU에서 가장 젊은 교수죠.\n" +
+                        "\n- A: So, economics… Sounds challenging.\n" +
+                        "    - 그래서 경제학이라… 어려울 것 같네요.\n" +
+                        "\n- B: Are your parents academics as well?\n" +
+                        "    - 부모님도 교수인가요?\n" +
+                        "\n- C: Uh, no. Well, my dad actually died before I was born, and my mom didn’t even go to college.\n" +
+                        "    - 아, 아니요. 음, 제 아버지는 사실 제가 태어나기 전에 돌아가셨어요, 그리고 어머니는 대학교도 안 나오셨죠.")
+                .origin("출처: 크레이지 리치 아시안(Crazy Rich Asians)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#영화 #패션")
+                .story("- A: I don’t know what you expect me to do.\n" +
+                        "    - 나보고 뭘 어쩌라는 건지 모르겠네.\n" +
+                        "\n- B: There’s nothing in this whole closet that’ll fit a size six, I can guarantee you.\n" +
+                        "    - 여기 옷장 전체를 봐도 6사이즈 옷은 한 벌도 없을거야, 내가 장담하지.\n" +
+                        "\n- C: These are all sample sizes, two and four.\n" +
+                        "    - 여긴 다 샘플 사이즈야, 2사이즈나 4사이즈.\n" +
+                        "\n- A: All right. We’re doing this for you. And…\n" +
+                        "    - 좋아, 이건 너한테 괜찮을 거 같네. 그리고…\n" +
+                        "\n- D: A poncho?\n" +
+                        "    - 판초요?\n" +
+                        "\n- B: You’ll take what I give you and you’ll like it.\n" +
+                        "    - 넌 내가 주는 거나 받고 좋아하면 되는 거야.\n" +
+                        "\n- C: We’re doing this Dolce for you. And shoes…\n" +
+                        "    - 이 Dolce가 너한테 어울리겠군. 그럼 신발은…\n" +
+                        "\n- D: Jimmy Choo. Manolo Blahnik. Wow.\n" +
+                        "    - Jimmy Choo. Manolo Blahnik. 우와.\n" +
+                        "\n- A: Nancy Gonzalez. Love that.\n" +
+                        "    - Nancy Gonzalez. 내가 정말 좋아해.\n" +
+                        "\n- B: Okay, Narciso Rodriguez. This we love.\n" +
+                        "    - 좋아, Narciso Rodriguez도. 이게 진짜 예뻐.\n" +
+                        "\n- C: Uh, it might fit. It might.\n" +
+                        "    - 음, 이게 맞을 수도 있겠다. 아마도.\n" +
+                        "\n- D: What?\n" +
+                        "    - 뭐라고요?\n" +
+                        "\n- A: Okay. Now, Chanel. You’re in desperate need of Chanel.\n" +
+                        "    - 좋아. 이제 Chanel. 넌 Chanel이 절실히 필요해보여.\n" +
+                        "\n- B: Darling, shall we?\n" +
+                        "    - 이제 시작할까?\n" +
+                        "\n- C: We have to get to the beauty department, and God knows how long that’s going to take.\n" +
+                        "    - 우리 뷰티 쪽도 봐야 해, 시간이 얼마나 오래 걸릴지는 모르겠다.")
+                .origin("출처: 악마는 프라다를 입는다(The Devil Wears Prada)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#영화 #패션 #면접")
+                .story("- A: So you don’t read Runway?\n" +
+                        "    - 그래, Runway를 읽어 본 적은 없고?\n" +
+                        "\n- B: Uh, no.\n" +
+                        "    - 음, 없어요.\n" +
+                        "\n- C: And before today, you had never heard of me.\n" +
+                        "    - 지금까지 내 이름조차 들어본 적도 없고.\n" +
+                        "\n- B: No.\n" +
+                        "    - 없죠.\n" +
+                        "\n- D: And you have no style or sense of fashion.\n" +
+                        "    - 그리고 스타일이나 패션 감각도 없군.\n" +
+                        "\n- B: Well, um, I think that depends on what you’re…\n" +
+                        "    - 뭐, 그건, 보시는 관점에 따라…\n" +
+                        "\n- A: No, no.\n" +
+                        "    - 아냐, 아냐.\n" +
+                        "\n- D: That wasn’t a question.\n" +
+                        "    - 질문한 건 아니야.\n" +
+                        "\n- B: Um, I was editor in chief of the Daily Northwestern. I also, um, won a national competiton for college journalists with my series on the janitors’ union, which exposed the exploitation of…\n" +
+                        "    - 음, 전 Northwestern 일간지 편집장이었어요. 그리고 전, 경비 노조에 대한 글로 전국 고교 기자 대회에서 우승을 했었는데, 그들의 노동 착취에 대한 내용을 고발하는…\n" +
+                        "\n- C: That’s all.\n" +
+                        "    - 그만 나가봐.")
+                .origin("출처: 악마는 프라다를 입는다(The Devil Wears Prada)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#영화 #크리스마스 #가족")
+                .story("- A: Dear Santa, this is Kate Pierce. I’ve been really good this year. I do say bad words every now and then. But, that’s only when my brother Teddy makes fun of me and I lose my… I mean, my temper.\n" +
+                        "    - 산타 할아버지께, 저는 Kate Pierce라고 해요. 올해는 진짜 말 잘 들었어요. 가끔 험한 말을 쓸 때가 있기는 해요. 하지만 그건 제 오빠 Teddy가 저를 놀려서 빡.. 아니, 열받을 때만 그래요.\n" +
+                        "\n- A: Let’s go. You’re gonna break it.\n" +
+                        "    - 빨리 줘. 망가지면 어떡해.\n" +
+                        "\n- B: Who cares, this camera’s like 20 years old.\n" +
+                        "    - 어쩌라고, 이건 산 지 20년도 넘은 카메라잖아.\n" +
+                        "\n- C: I have to work.\n" +
+                        "    - 일하러 가야 돼.\n" +
+                        "\n- B: It’s Christmas eve.\n" +
+                        "    - 크리스마스 이브잖아요.\n" +
+                        "\n- C: You’re gonna stay home with your sister.\n" +
+                        "    - 그러니까 넌 여동생이랑 집에 있으렴.\n" +
+                        "\n- D: We should make a video. Maybe we can get a shot of Santa Clause.\n" +
+                        "    - 우리 영상 만들자. 산타 할아버지를 찍을 수도 있잖아.\n" +
+                        "\n- B: You really have no clue, do you? Nobody’s ever seen Santa Clause.\n" +
+                        "    - 너 진짜 아무것도 모르는구나, 그렇지? 산타 할아버지를 본 사람은 없어.\n" +
+                        "\n- D: Tell me you’re getting this.\n" +
+                        "    - 제발 이거 찍고 있다고 해줘.")
+                .origin("출처: 크리스마스 연대기(The Christmas Chronicles)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#영화 #가족 #크리스마스 #첫만남 #소개")
+                .story("- A: Who is it, Daddy?\n" +
+                        "    - 아빠, 누구예요?\n" +
+                        "\n- B: Daddy?\n" +
+                        "    - 아빠라니요?\n" +
+                        "\n- C: Yes. I am “Daddy.” Amanda, this is my daughter, Sophie. Sophie, this is my friend Amanda.\n" +
+                        "    - 네. 제가 “아빠”예요. Amanda, 이쪽은 제 딸 Sophie이에요. Sophie, 아분은 아빠 친구 Amanda야.\n" +
+                        "\n- B: Hi.\n" +
+                        "    - 안녕.\n" +
+                        "\n- A: How do you do?\n" +
+                        "    - 안녕하세요, 오늘 어떠신가요?\n" +
+                        "\n- B: I’m fine, thank you, how are you?\n" +
+                        "    - 나는 좋아, 고마워, 너는 어떠니?\n" +
+                        "\n- A: Very well, thank you. Do you wanna come in?\n" +
+                        "    - 저도 좋아요, 감사합니다. 들어오실래요?\n" +
+                        "\n- B: Oh, no, I just…\n" +
+                        "    - 아, 아니, 나는 그냥…\n" +
+                        "\n- D: Hi.\n" +
+                        "    - 안녕하세요.\n" +
+                        "\n- C: Come here.\n" +
+                        "    - 이리 와.\n" +
+                        "\n- D: Daddy, who is this?\n" +
+                        "    - 아빠, 이분은 누구세요?\n" +
+                        "\n- C: This is Amanda, and Amanda, this is my youngest, Olivia.\n" +
+                        "    - 이분은 Amanda란다, 그리고 Amanda, 얘는 제 막내, Olivia이에요.\n" +
+                        "\n- B: Oh. Sophia and Olivia.\n" +
+                        "    - 아. Sophia 랑 Olivia.\n" +
+                        "\n- D: Dad, dad!\n" +
+                        "    - 아빠, 아빠!\n" +
+                        "\n- C: Sorry, yes, of course, come in!\n" +
+                        "    - 죄송해요, 네, 그렇지, 들어오세요!\n" +
+                        "\n- A: Come in!\n" +
+                        "    - 들어오세요!\n" +
+                        "\n- B: Oh… okay.\n" +
+                        "    - 아… 알겠어요.\n" +
+                        "\n- D: Daddy, can we still have hot chocolate, please?\n" +
+                        "    - 아빠, 우리 아직 핫초코 먹어도 돼요?\n" +
+                        "\n- C: Yes.\n" +
+                        "    - 그래.\n" +
+                        "\n- A: With bathing marshmallows?\n" +
+                        "    - 마시멜로도 퐁당 빠뜨려서요?\n" +
+                        "\n- C: Yeah.\n" +
+                        "    - 그래.")
+                .origin("출처: 로맨틱 홀리데이 (The Holiday)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#애니메이션 #반려동물")
+                .story("- A: Taking care of a pet seems like a lot of responsibility.\n" +
+                        "    - 반려동물을 키우는 건 엄청난 책임감이 따르는 것 같아.\n" +
+                        "\n- B: It’s true.\n" +
+                        "    - 맞아.\n" +
+                        "\n- C: There’s a lot to keep track of.\n" +
+                        "    - 확인해야 할 게 엄청 많아.\n" +
+                        "\n- D: For instance, I have to make sure Snoopy eats healthy meals.\n" +
+                        "    - 예를 들어, 스누피가 건강한 식사를 할 수 있도록 해야 해.\n" +
+                        "\n- A: Do all dogs eat like that?\n" +
+                        "    - 모든 강아지들이 저렇게 먹어?\n" +
+                        "\n- B: Snoopy’s a little different.\n" +
+                        "    - 스누피는 약간 별나.\n" +
+                        "\n- C: I have to make sure Snoopy gets enough exercise.\n" +
+                        "    - 스누피가 충분한 활동을 할 수 있도록 해야 해.\n" +
+                        "\n- D: And of course, I always make sure he’s relaxed and happy.\n" +
+                        "    - 그리고 당연히, 항상 스누피가 편안하고 행복할 수 있도록 해.\n" +
+                        "\n- B: Wow, Pets are even more work than I thought!\n" +
+                        "    - 우와, 반려동물을 키우는 건 생각보다 해야 되는 일이 정말 많구나!")
+                .origin("출처: 스누피(Snoopy)")
+                .build();
+        scriptRepository.save(script);
+
+        script = Script.builder()
+                .type(4)
+                .category("#미드 #친구 #가벼운 대화")
+                .story("- A: Well, you know, thy way that you run is just a little…\n" +
+                        "    - 음, 뭐랄까 네가 뛰는 모습이 약간 이렇잖아…\n" +
+                        "\n- B: So?\n" +
+                        "    - 그래서?\n" +
+                        "\n- C: Well, it’s embarrassing.\n" +
+                        "    - 음, 창피한걸.\n" +
+                        "\n- D: People were looking at us like we were crazy.\n" +
+                        "    - 사람들이 우릴 미친 사람처럼 쳐다봤어.\n" +
+                        "\n- B: Why do you care?\n" +
+                        "    - 그게 왜 신경 쓰여?\n" +
+                        "\n- A: Because they’re people.\n" +
+                        "    - 왜냐하면 사람들이잖아.\n" +
+                        "\n- B:  But people that you don’t know and will never see again.\n" +
+                        "    - 네가 모르는, 그리고 다시 만나지도 않을 사람들이잖아.\n" +
+                        "\n- C: Yes, but still, they are people… With eyes.\n" +
+                        "    - 맞아, 근데 여전히, 사람들이잖아… 눈이 달린.\n" +
+                        "\n- B: Well, I didn’t get embarrassed running next to Miss.\n" +
+                        "    - 참나, 난 옆에 있는 여자가 이렇게 뛴다고 해서 창피해하지 않았는데…\n" +
+                        "\n- D: Yeah… You’re uptight.\n" +
+                        "    - 넌 꽉 막혔으니까.")
+                .origin("출처: 프렌즈 (Friends)")
+                .build();
+        scriptRepository.save(script);
+        
     }
 
 
