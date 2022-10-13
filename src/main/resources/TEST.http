@@ -1,2 +1,12 @@
 ###
-GET localhost:8080/chat/script/2
+GET http://35.174.109.220:8080/chat/script/2/미드
+
+###
+GET http://localhost:8080/admin/script/rlaqhal123
+
+###
+GET http://3.38.253.255:8080/admin/script/rlaqhal123
+
+
+
+

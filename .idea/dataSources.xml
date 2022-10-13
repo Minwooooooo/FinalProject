@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="engfluencer@engfluencer.ciy3cvpvgepw.ap-northeast-2.rds.amazonaws.com" uuid="c57d1b20-4fdc-47b4-83dd-637df0b83ac2">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://engfluencer.ciy3cvpvgepw.ap-northeast-2.rds.amazonaws.com:3306/engfluencer</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>
