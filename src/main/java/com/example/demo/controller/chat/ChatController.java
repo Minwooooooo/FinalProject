@@ -26,21 +26,27 @@ public class ChatController {
     // websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
     @MessageMapping("/chat/message")
     public void message(ChatMessage message,@Header("Authorization") String token) {
+        // token에서 정보 조회
         String nickname = jwtTokenProvider.getMemberNameByToken(token);
         Long memberId = jwtTokenProvider.getMemberIdByToken(token);
         String image = chatHandler.getImageByToken(token);
+
+        // msg 설정
         String msg = message.getMessage();
-        System.out.println(nickname+" cont");
+
+        // Type확인
+        // 입,퇴장,일반 채팅
         if (message.getType().equals(ChatMessage.MessageType.ENTER)||message.getType().equals(ChatMessage.MessageType.QUIT)||message.getType().equals(ChatMessage.MessageType.NOTICE)||message.getType().equals(ChatMessage.MessageType.TALK)){
+            // 공백 무시
             if (!msg.trim().equals("".trim())){
-                System.out.println("if");
             chatService.sendChatMessage(message,nickname,image  );
             }
+        // 유저 강퇴
         }else if(message.getType().equals(ChatMessage.MessageType.VAN)){
             Long vanId=Long.valueOf(message.getMessage());
             String roomId=message.getRoomId();
             roomHandler.vanHandler(memberId,vanId,roomId);
-
+        // 방장변경
         }
         else if(message.getType().equals(ChatMessage.MessageType.MANAGER)){
             Long newManagerId=Long.valueOf(message.getMessage());

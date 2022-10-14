@@ -30,19 +30,24 @@ public class MemoService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
+
+    // 메모 저장하기
     @Transactional
     public MemoDto saveMemo(MemoRequestDto memoRequestDto, HttpServletRequest request) {
 
         ChatRoom room = chatRoomRepository.findByRoomId(memoRequestDto.getRoomId());
 
         Member member = memberService.findMember(request);
-
+        // 메모 조회
         Optional<Memo> temp_memo = memoRepository.findByMemberAndRoomId(member, room.getRoomId());
         Memo memo=null;
+
+        // NPE 검증
         if (temp_memo.isPresent()){
             memo=temp_memo.get();
         }
 
+        // 이미 저장한 메모가 없을때 생성
         if (memo == null) {
             memo = Memo.builder()
                     .member(member)
@@ -64,7 +69,9 @@ public class MemoService {
                     .createDate(memo.getCreateDate())
                     .build();
 
-        } else {
+        }
+        // 이미 저장한 메모가 있을때 수정
+        else {
             memo.updateMemo(memoRequestDto.getContents());
 
             return MemoDto.builder()

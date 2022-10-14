@@ -45,9 +45,11 @@ public class JwtTokenProvider {
     public String creatToken(Member member, HttpServletRequest request){
         long date = new Date().getTime();
 
+        // MemberIP확인
         String memberIP=getMemberIP(request);
         System.out.println(memberIP);
 
+        // AccessToken생성
         String accessToken=Jwts.builder()
                 .setSubject(member.getId().toString())
                 .claim("name",member.getMemberName())
@@ -56,11 +58,13 @@ public class JwtTokenProvider {
                 .signWith(JWT_KEY,SignatureAlgorithm.HS256)
                 .compact();
 
+        // RefreshToken생성
         String refreshToken=Jwts.builder()
                 .setExpiration(new Date(date+Refresh_TOKEN_EXPIRE_TIME))
                 .signWith(JWT_KEY,SignatureAlgorithm.HS256)
                 .compact();
 
+        // RefreshToken Entity 생성
         RefreshToken newRefreshToken= RefreshToken.builder()
                 .refreshTokenId(UUID.randomUUID().toString())
                 .refreshToken(refreshToken)

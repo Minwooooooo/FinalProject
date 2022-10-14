@@ -16,11 +16,13 @@ public class MemoController {
 
     private final MemoService memoService;
 
+    // 메모 저장
     @PostMapping(value = "/memo")
     public ResponseDto<?> saveMemo(@RequestBody MemoRequestDto memoRequestDto, HttpServletRequest request){
         return ResponseDto.success(memoService.saveMemo(memoRequestDto,request));
     }
 
+    // 해당 방 메모 조회
     @GetMapping(value = "/memo/{roomId}")
     public ResponseDto<?> getMemo(@PathVariable String roomId,HttpServletRequest request){
         return ResponseDto.success(memoService.getMemo(roomId,request));

@@ -15,6 +15,7 @@ public class ScriptController {
     private final ScriptService scriptService;
     private final ScriptDummy scriptDummy;
 
+    // 스크립트 조회
     @GetMapping(value={"/chat/script/{type}"
             ,"/chat/script/{type}/{category1}"
             ,"/chat/script/{type}/{category1}/{category2}"
@@ -26,6 +27,7 @@ public class ScriptController {
         return scriptService.scriptsList(type,category1,category2,category3);
     }
 
+    // (임시) 스크립트 저장
     @GetMapping(value = "/admin/script/{key}")
     public void scriptRunner(@PathVariable String key){
         scriptDummy.setScript(key);

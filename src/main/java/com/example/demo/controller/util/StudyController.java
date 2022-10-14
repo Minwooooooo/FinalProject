@@ -17,6 +17,8 @@ public class StudyController {
     private final TimerService timerService;
     private final ChatService chatService;
 
+
+    // 타이머 저장
     @RequestMapping(value = "/auth/timer",method = RequestMethod.POST)
     public ResponseDto<?> timer(@RequestBody TimerRequestDto timerRequestDto, HttpServletRequest request){
         return timerService.StudyTimer(timerRequestDto,request);

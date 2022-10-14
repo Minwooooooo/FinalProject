@@ -29,6 +29,8 @@ public class ChatHandler {
     private final ChatRoomRepository chatRoomRepository;
     private final SimpMessageSendingOperations messageSendingOperations;
 
+
+    // 토큰에서 프로필 사진 얻기
     public String getImageByToken(String token) {
         String temp_id = jwtTokenProvider.tempClaim(token).getSubject();
         Long id = Long.valueOf(temp_id);
@@ -37,16 +39,23 @@ public class ChatHandler {
         return image;
     }
 
+
+    // 채팅 핸들러
     public MessageDto ChatTypeHandler(ChatMessage chatMessage, String memberName, String image) {
+        // Dto 선언
         MessageDto temp_msg = null;
+
+        // 채팅방 및 Detail 호출
         String roomId= chatMessage.getRoomId();
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(()->new RuntimeException("방을 찾을 수 없습니다."));
         RoomDetail roomDetail=roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow(()->new RuntimeException("방을 찾을 수 없습니다."));
 
+        // 현재시간 호출
         String[] chatTimeDto=chatTime();
 
+        // 채팅 접속 처리
         if (chatMessage.getType().equals(ChatMessage.MessageType.ENTER)) { // websocket 연결요청
             temp_msg = MessageDto.builder()
                     .type(chatMessage.getType().ordinal())
@@ -64,6 +73,8 @@ public class ChatHandler {
                     .build();
             messageSendingOperations.convertAndSend("/sub/chat/room/" + roomId, messageDto);
         }
+
+        // 채팅 퇴장 처리
         else if (chatMessage.getType().equals(ChatMessage.MessageType.QUIT)) { // websocket 연결요청
             temp_msg = MessageDto.builder()
                     .type(chatMessage.getType().ordinal())
@@ -81,6 +92,8 @@ public class ChatHandler {
             messageSendingOperations.convertAndSend("/sub/chat/room/" + roomId, messageDto);
             //인원수 -
         }
+
+        // 일반 채팅 처리 및 공란 무시
         else if (chatMessage.getType().equals(ChatMessage.MessageType.TALK)||!chatMessage.getMessage().trim().equals("".trim())) { // websocket 연결요청
             String msg=chatMessage.getMessage();
             if(chatBotService.botCheck(msg)){
@@ -105,6 +118,7 @@ public class ChatHandler {
         return temp_msg;
     }
 
+    // 현재시간 출력
     private String[] chatTime(){
         Date date=new Date();
         int month=date.getMonth()+1;
