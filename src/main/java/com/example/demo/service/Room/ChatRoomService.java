@@ -14,6 +14,7 @@ import com.example.demo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,9 +32,11 @@ public class ChatRoomService {
     private final MemberRepository memberRepository;
 
     // 채팅방 생성
+    @Transactional
     public ChatRoom createChatRoom(CreatRoomRequestDto creatRoomRequestDto, HttpServletRequest request) {
         // 멤버 확인
-        Long memberId=Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(jwtTokenProvider.getToken(request)).getSubject());
+        Long memberId=Long.valueOf(jwtTokenProvider.tempClaim(jwtTokenProvider.getToken(request)).getSubject());
+
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
         ChatRoom chatRoom = ChatRoom.create(creatRoomRequestDto);

@@ -13,6 +13,7 @@ import org.apache.tomcat.util.json.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +31,7 @@ public class KakaoLoginService {
     private final JwtTokenProvider jwtTokenProvider;
     final static String BE_SERVER = "localhost:8080";
 
-    public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response) throws IOException, ParseException {
+    public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response, HttpServletRequest request) throws IOException, ParseException {
         // 0. FE에서 코드받기
         //https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=6d51c4942788dc0abd939ace6ee2d8b7&redirect_uri=http://localhost:3000/login/kakao
 
@@ -47,7 +48,7 @@ public class KakaoLoginService {
         }
         // 4. 로그인(Jwt토큰 생성)
         Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).get();
-        String accessToken = jwtTokenProvider.creatToken(member);
+        String accessToken = jwtTokenProvider.creatToken(member,request);
 
         //프로필사진 업데이트
         changeProfileImage(memberInfo);

@@ -117,9 +117,16 @@ public class ChatHandler {
         if(temp_hour>=12){
             hour="오후 "+(temp_hour-12);
         }
+        String chatTime;
         int minute=date.getMinutes();
+
+        if(minute<10){
+            chatTime=hour+":0"+minute;
+        }
+        else {
+            chatTime=hour+":"+minute;
+        }
         String chatDate=month+"월 "+day+"일";
-        String chatTime=hour+":"+minute;
         String[] chatTimeDto=new String[2];
         chatTimeDto[0]=chatDate;
         chatTimeDto[1]=chatTime;

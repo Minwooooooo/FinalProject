@@ -17,7 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  * Web Security 설정(debug = true)
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = false)
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandlerException accessDeniedHandlerException;
@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(accessDeniedHandlerException)
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()

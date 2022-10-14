@@ -47,7 +47,7 @@ public class RoomHandler {
     public ResponseDto<?> enterRoomHandler(String roomId, String roomPw, HttpServletRequest request){
         // 접속 멤버 조회
         String token= jwtTokenProvider.getToken(request);
-        Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(token).getSubject()))
+        Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaim(token).getSubject()))
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
 
         // 방조회
@@ -106,7 +106,7 @@ public class RoomHandler {
     public ResponseDto<?> quitRoomHandler(String roomId,HttpServletRequest request){
         // 접속 멤버 조회
         String token= jwtTokenProvider.getToken(request);
-        Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(token).getSubject()))
+        Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaim(token).getSubject()))
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
 
         // 방조회
@@ -244,7 +244,7 @@ public class RoomHandler {
     public void quitProcess(HttpServletRequest request){
         // 접속 멤버 조회
         String token= jwtTokenProvider.getToken(request);
-        Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaimNoBaerer(token).getSubject()))
+        Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaim(token).getSubject()))
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
 
         Optional<RoomDetail> roomDetail=roomDetailRepository.findByEnterMembers(member);

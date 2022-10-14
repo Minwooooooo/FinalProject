@@ -22,11 +22,13 @@ public class ChatRoomController {
     public ResponseDto<?> creatRoom(@RequestBody CreatRoomRequestDto creatRoomRequestDto, HttpServletRequest request){
         String roomId=chatRoomService.createChatRoom(creatRoomRequestDto,request).getRoomId();
         String roomPw=creatRoomRequestDto.getRoomPw();
+        roomHandler.quitProcess(request);
         return roomHandler.enterRoomHandler(roomId,roomPw,request);
     }
 
     @GetMapping(value = "/rooms")
     public ResponseDto<?> roomList(HttpServletRequest request){
+        roomHandler.quitProcess(request);
         return ResponseDto.success(chatRoomService.roomList());
 
     }
@@ -36,6 +38,7 @@ public class ChatRoomController {
 
     @PostMapping(value = "/enter/{roomId}")
     public ResponseDto<?> enterRoom(@PathVariable String roomId, @RequestBody RoomPasswordDto roomPasswordDto, HttpServletRequest request){
+        roomHandler.quitProcess(request);
         return roomHandler.enterRoomHandler(roomId,roomPasswordDto.getPassword(),request);
     }
 

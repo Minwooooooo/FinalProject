@@ -21,4 +21,9 @@ public class MemoController {
         return ResponseDto.success(memoService.saveMemo(memoRequestDto,request));
     }
 
+    @GetMapping(value = "/memo/{roomId}")
+    public ResponseDto<?> getMemo(@PathVariable String roomId,HttpServletRequest request){
+        return ResponseDto.success(memoService.getMemo(roomId,request));
+    }
+
 }
