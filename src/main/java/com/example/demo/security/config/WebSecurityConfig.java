@@ -46,8 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
-                .anyRequest().permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/login/kakao").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/admin/**").permitAll()
+                .anyRequest().authenticated()
 
             .and()
                 .apply(new JwtSecurityConfiguration(jwtTokenProvider));
