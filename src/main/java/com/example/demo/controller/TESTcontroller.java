@@ -32,16 +32,9 @@ public class TESTcontroller {
         roomHandler.quitProcess(request);
     }
 
-    @GetMapping("/file")
-    public ResponseEntity<Resource> getFile(){
-        String filename = "test.xlsx";
-        InputStreamResource file = new InputStreamResource(chatToExcel.load());
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename="+ filename)
-                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
-                .body(file);
-
-    }
+//  @GetMapping("/file/{roomId}")
+//  public void getFile(@PathVariable String roomId){
+//      chatToExcel.logSave(roomId);
+//  }
 
 }

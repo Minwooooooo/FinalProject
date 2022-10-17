@@ -18,6 +18,7 @@ import com.example.demo.repository.room.ChatRoomRepository;
 import com.example.demo.repository.room.RoomNoticeRepository;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.service.Chat.ChatHandler;
+import com.example.demo.service.Chat.ChatToExcel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class RoomHandler {
     private final RoomNoticeRepository roomNoticeRepository;
     private final ChatHandler chatHandler;
     private final ChatMessageRepository chatMessageRepository;
+    private final ChatToExcel chatToExcel;
 
 
     private final SimpMessageSendingOperations messageSendingOperations;
@@ -150,6 +152,8 @@ public class RoomHandler {
 
         //방이 비활성화 상태(2)이고 인원수가 0인 경우
         if (chatRoom.getStatusChecker() == 2 && chatRoom.getMemberCount() == 0) {
+            // 채팅 S3에 저장 후 삭제
+            chatToExcel.logSave(roomId);
 
             if(roomDetail.getBlackMembers()!=null){
                 while (roomDetail.getBlackMembers().size()!=0) {

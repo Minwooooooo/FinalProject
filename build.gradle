@@ -56,6 +56,10 @@ dependencies {
 	implementation group: 'org.apache.poi', name: 'poi-scratchpad', version: '4.1.2'
 	implementation 'org.apache.poi:poi-ooxml:4.1.2'
 	implementation 'org.apache.poi:poi:4.1.2'
+
+	implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.290')
+	implementation 'com.amazonaws:aws-java-sdk-s3'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
 }
 
 tasks.named('test') {
