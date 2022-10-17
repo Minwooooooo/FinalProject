@@ -23,13 +23,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class KakaoLoginService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    final static String BE_SERVER = "localhost:8080";
 
     public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response, HttpServletRequest request) throws IOException, ParseException {
         // 0. FE에서 코드받기
@@ -41,13 +41,20 @@ public class KakaoLoginService {
         // 2. 정보 받기
         JsonObject memberInfo=getInfo(Accesstoken);
         // 3. 기존 가입 여부 확인
-        if(!chekExistMember(memberInfo)){
+        if(!checkExistMember(memberInfo)){
             // false : 신규 회원
             // 회원가입
             signIn(memberInfo);
         }
+
+        JsonParser jsonParser = new JsonParser();
+        Object obj = jsonParser.parse(memberInfo.get("properties").toString());
+        JsonObject properties = (JsonObject) obj;
+        String temp_name=properties.get("nickname").toString();
+
         // 4. 로그인(Jwt토큰 생성)
-        Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).get();
+        Member member = memberRepository.findByKakaoId(Long.valueOf(memberInfo.get("id").toString())).get();
+        member.setMemberName(temp_name.substring(1,temp_name.length()-1));
         String accessToken = jwtTokenProvider.creatToken(member,request);
 
         //프로필사진 업데이트
@@ -60,7 +67,7 @@ public class KakaoLoginService {
         LoginResponseDto responseDto = LoginResponseDto.builder()
                 .memberId(member.getId())
                 .memberName(member.getMemberName())
-                .memberImg(member.getProfileImage())
+                .memberImg(member.getMemberImage())
                 .build();
 
         return ResponseDto.success(responseDto);
@@ -126,8 +133,8 @@ public class KakaoLoginService {
     }
 
     // 유저 기존 가입여부 확인
-    public boolean chekExistMember(JsonObject info){
-        if(memberRepository.existsById(Long.valueOf(info.get("id").toString()))){
+    public boolean checkExistMember(JsonObject info){
+        if(memberRepository.existsByKakaoId(Long.valueOf(info.get("id").toString()))){
             return true;
         }
         return false;
@@ -156,9 +163,10 @@ public class KakaoLoginService {
         // 신규 회원가입 빌드
         // 권한은 기본값인 USER
         Member member = Member.builder()
-                .id(Long.valueOf(memberInfo.get("id").toString()))
+                .id(UUID.randomUUID().toString())
+                .kakaoId(Long.valueOf(memberInfo.get("id").toString()))
                 .memberName(temp_name.substring(1,temp_name.length()-1))
-                .profileImage(profileImage)
+                .memberImage(profileImage)
                 .userRole(Member.Authority.ROLE_USER)
                 .build();
         memberRepository.save(member);
@@ -182,11 +190,8 @@ public class KakaoLoginService {
             profileImage=temp_profileImage.substring(1,temp_profileImage.length()-1);
         }
 
-        Member member = memberRepository.findById(Long.valueOf(memberInfo.get("id").toString())).get();
+        Member member = memberRepository.findByKakaoId(Long.valueOf(memberInfo.get("id").toString())).get();
 
-        if(!member.getProfileImage().equals(profileImage)){
-            member.setNewProfileImage(profileImage);
-        }
 
     }
 

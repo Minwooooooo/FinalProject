@@ -1,10 +1,12 @@
 package com.example.demo.entity.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 @Builder
@@ -15,23 +17,42 @@ import javax.persistence.Id;
 public class Member {
 
     @Id
-    private Long id;
+    private String id;
+
+    @Column
+    private Long kakaoId;
+
+    @Column
+    private String naverId;
 
     @Column
     private String memberName;
 
     @Column
-    private String profileImage;
+    private String memberImage;
+
+    @Column
+    @JsonIgnore
+    private String phoneNumber;
 
     @Column
     private Authority userRole;
+
+    @Column
+    private Date lastPing;
 
     public enum Authority {
         ROLE_USER,ROLE_ADMIN,ROLE_BLACK
     }
 
-    public void setNewProfileImage(String url){
-        this.profileImage = url;
+    public void setMemberImage(String url){
+        this.memberImage = url;
+    }
+    public void setMemberName(String name){
+        this.memberName=name;
+    }
+    public void setlastPing(Date pingDate){
+        this.lastPing=pingDate;
     }
 
 }

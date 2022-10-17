@@ -25,9 +25,7 @@ public class MemberService {
 
         String memberId = claim.getSubject();
 
-        Long id = Long.valueOf(memberId);
-
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findById(memberId).get();
 
         return member;
     }

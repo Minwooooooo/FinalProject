@@ -51,13 +51,13 @@ public class JwtTokenProvider {
 
         // AccessToken생성
         String accessToken=Jwts.builder()
-                .setSubject(member.getId().toString())
+                .setSubject(member.getId())
                 .claim("name",member.getMemberName())
                 .claim("auth",member.getUserRole().toString())
                 .setExpiration(new Date(date+ACCESS_TOKEN_EXPIRE_TIME))
                 .signWith(JWT_KEY,SignatureAlgorithm.HS256)
                 .compact();
-
+        System.out.println(accessToken);
         // RefreshToken생성
         String refreshToken=Jwts.builder()
                 .setExpiration(new Date(date+Refresh_TOKEN_EXPIRE_TIME))
@@ -154,8 +154,8 @@ public class JwtTokenProvider {
     }
 
     // Token에서 Id 가져오기
-    public Long getMemberIdByToken(String token){
-        Long memberId=Long.valueOf(tempClaim(token).getSubject());
+    public String getMemberIdByToken(String token){
+        String memberId=tempClaim(token).getSubject();
         return memberId;
     }
 

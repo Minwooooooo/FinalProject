@@ -3,11 +3,17 @@ package com.example.demo.repository.member;
 import com.example.demo.entity.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, String> {
 
-    Optional<Member> findById(Long id);
+    Optional<Member> findByKakaoId(Long id);
+    Optional<Member> findByNaverId(String id);
 
-    Member findByMemberName(String memberName);
+    boolean existsByKakaoId(Long id);
+
+    boolean existsByNaverId(String id);
+
+
 }
