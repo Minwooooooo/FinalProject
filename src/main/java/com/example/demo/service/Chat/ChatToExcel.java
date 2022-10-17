@@ -86,7 +86,7 @@ public class ChatToExcel {
     public void upload(ByteArrayInputStream chatLog, String fileName) {
         //ObjectMetadata 생성
         ObjectMetadata objectMetaData = new ObjectMetadata();
-        objectMetaData.setContentType(".xlsx");
+        objectMetaData.setContentType("application/vnd.ms-excel");
 
         amazonS3Client.putObject(
                 new PutObjectRequest(S3_BUCKET,fileName,chatLog,objectMetaData)
