@@ -29,9 +29,8 @@ public class TimerService {
     public ResponseDto<?> StudyTimer(TimerRequestDto timerRequestDto, HttpServletRequest request){
 
         // 유저 확인
-        String temp_id=jwtTokenProvider.tempClaim(jwtTokenProvider.getToken(request)).getSubject();
-        Long member_id =Long.valueOf(temp_id);
-        Member member=memberRepository.findById(member_id).get();
+        String memberId=jwtTokenProvider.tempClaim(jwtTokenProvider.getToken(request)).getSubject();
+        Member member=memberRepository.findById(memberId).get();
 
         // 방 확인
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(timerRequestDto.getRoomId());

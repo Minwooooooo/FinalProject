@@ -16,7 +16,7 @@ public class ScriptDummy {
 
     public void setScript(String key) {
         System.out.println(key);
-        if(key.equals(Secret)){
+        if(key.equals(Secret)||!scriptRepository.existsById(1L)){
             setScript2();
             setScript3();
             setScript4();

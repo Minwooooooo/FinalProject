@@ -9,5 +9,5 @@ import lombok.Setter;
 @Getter
 public class VanMessageDto {
     private int type;
-    private Long vanId;
+    private String vanId;
 }

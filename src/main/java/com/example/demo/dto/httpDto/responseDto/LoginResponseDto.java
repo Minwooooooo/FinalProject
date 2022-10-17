@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class LoginResponseDto {
-    private Long memberId;
+    private String memberId;
     private String memberName;
     private String memberImg;
 }

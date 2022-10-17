@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public class RoomDetailMessageDto {
     private int type;
-    private Long managerId;
+    private String managerId;
     private Long maxMember;
     private Long connectedMember;
 }

@@ -89,7 +89,7 @@ public class MemoService {
     public String getMemo(String roomId,HttpServletRequest request){
 
         String token= jwtTokenProvider.getToken(request);
-        Member member=memberRepository.findById(Long.valueOf(jwtTokenProvider.tempClaim(token).getSubject()))
+        Member member=memberRepository.findById(jwtTokenProvider.tempClaim(token).getSubject())
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
 
         Optional<Memo> memo=memoRepository.findByMemberAndRoomId(member,roomId);
