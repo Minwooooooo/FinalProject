@@ -1,10 +1,9 @@
 package com.example.demo.controller.chat;
 
 
-import com.example.demo.entity.chat.ChatMessage;
+import com.example.demo.dto.messageDto.responseDto.ChatMessageResponseDto;
 import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.service.Chat.ChatHandler;
-import com.example.demo.service.Chat.ChatService;
 import com.example.demo.service.Room.RoomHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,17 +17,16 @@ import org.springframework.stereotype.Controller;
 public class ChatController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final ChatService chatService;
     private final ChatHandler chatHandler;
     private final RoomHandler roomHandler;
 
 
     // websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message,@Header("Authorization") String token) {
+    public void message(ChatMessageResponseDto message, @Header("Authorization") String token) {
         // token에서 정보 조회
         String nickname = jwtTokenProvider.getMemberNameByToken(token);
-        Long memberId = jwtTokenProvider.getMemberIdByToken(token);
+        String memberId = jwtTokenProvider.getMemberIdByToken(token);
         String image = chatHandler.getImageByToken(token);
 
         // msg 설정
@@ -36,23 +34,39 @@ public class ChatController {
 
         // Type확인
         // 입,퇴장,일반 채팅
-        if (message.getType().equals(ChatMessage.MessageType.ENTER)||message.getType().equals(ChatMessage.MessageType.QUIT)||message.getType().equals(ChatMessage.MessageType.NOTICE)||message.getType().equals(ChatMessage.MessageType.TALK)){
+        if (message.getType().equals(ChatMessageResponseDto.MessageType.ENTER)||message.getType().equals(ChatMessageResponseDto.MessageType.QUIT)||message.getType().equals(ChatMessageResponseDto.MessageType.NOTICE)||message.getType().equals(ChatMessageResponseDto.MessageType.TALK)){
             // 공백 무시
             if (!msg.trim().equals("".trim())){
-            chatService.sendChatMessage(message,nickname,image  );
+            chatHandler.sendChatMessage(message,nickname,memberId,image);
             }
         // 유저 강퇴
-        }else if(message.getType().equals(ChatMessage.MessageType.VAN)){
-            Long vanId=Long.valueOf(message.getMessage());
+        }else if(message.getType().equals(ChatMessageResponseDto.MessageType.VAN)){
+            String vanId=message.getMessage();
             String roomId=message.getRoomId();
             roomHandler.vanHandler(memberId,vanId,roomId);
         // 방장변경
         }
-        else if(message.getType().equals(ChatMessage.MessageType.MANAGER)){
-            Long newManagerId=Long.valueOf(message.getMessage());
+        else if(message.getType().equals(ChatMessageResponseDto.MessageType.MANAGER)){
+            String newManagerId=message.getMessage();
             String roomId=message.getRoomId();
             roomHandler.editManager(memberId,newManagerId,roomId);
 
+        }
+        // 신고하기
+        else if(message.getType().equals(ChatMessageResponseDto.MessageType.REPORT)){
+            String managerId=memberId;
+            String roomId=message.getRoomId();
+            String reportId=message.getMessage();
+            String reportReason=message.getEtc();
+            roomHandler.reportHandler(managerId,roomId,reportId,reportReason);
+        }
+        // 접속 테스트
+        else if (message.getType().equals(ChatMessageResponseDto.MessageType.PINGPONG)) {
+//            Date date = new Date();
+//            int sec = date.getSeconds();
+//            System.out.println(sec+" : "+message.getType());
+            String roomId=message.getRoomId();
+            roomHandler.pingPongCheck(memberId,roomId);
         }
 
     }

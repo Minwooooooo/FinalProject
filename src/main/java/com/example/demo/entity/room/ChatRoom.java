@@ -32,6 +32,9 @@ public class ChatRoom{
     private boolean lockChecker;
 
     @Column
+    private String roomImage;
+
+    @Column
     private String roomPw;
 
     @Column
@@ -43,6 +46,7 @@ public class ChatRoom{
         chatRoom.roomId = UUID.randomUUID().toString();
         chatRoom.roomName = creatRoomRequestDto.getRoomName();
         chatRoom.category = creatRoomRequestDto.getCategory();
+        chatRoom.roomImage = creatRoomRequestDto.getRoomImage();
         chatRoom.maxEnterMember = creatRoomRequestDto.getMaxEnterMember();
         chatRoom.memberCount = 0L;
         chatRoom.lockChecker = creatRoomRequestDto.isLock();
@@ -60,7 +64,4 @@ public class ChatRoom{
         }
     }
 
-    public enum categoryList{
-        생활영어, 캠스터디, 시험대비, 스크립트
-    }
 }

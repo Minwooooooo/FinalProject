@@ -35,7 +35,7 @@ public class ChatRoomService {
     @Transactional
     public ChatRoom createChatRoom(CreatRoomRequestDto creatRoomRequestDto, HttpServletRequest request) {
         // 멤버 확인
-        Long memberId=Long.valueOf(jwtTokenProvider.tempClaim(jwtTokenProvider.getToken(request)).getSubject());
+        String memberId=jwtTokenProvider.tempClaim(jwtTokenProvider.getToken(request)).getSubject();
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
@@ -55,6 +55,7 @@ public class ChatRoomService {
             RoomListResponseDto temp_room= RoomListResponseDto.builder()
                     .roomId(temp_list.get(i).getRoomId())
                     .roomName(temp_list.get(i).getRoomName())
+                    .roomImage(temp_list.get(i).getRoomImage())
                     .lock(temp_list.get(i).isLockChecker())
                     .category(temp_list.get(i).getCategory().toString())
                     .maxCount(temp_list.get(i).getMaxEnterMember())

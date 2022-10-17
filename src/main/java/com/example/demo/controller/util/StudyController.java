@@ -3,9 +3,8 @@ package com.example.demo.controller.util;
 import com.example.demo.dto.httpDto.requestDto.TimerRequestDto;
 import com.example.demo.dto.ResponseDto;
 import com.example.demo.dto.httpDto.requestDto.TranslationRequestDto;
-import com.example.demo.service.Chat.ChatService;
+import com.example.demo.service.Chat.ChatHandler;
 import com.example.demo.service.Util.TimerService;
-import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class StudyController {
     private final TimerService timerService;
-    private final ChatService chatService;
+    private final ChatHandler chatHandler;
 
 
     // 타이머 저장
@@ -28,6 +27,6 @@ public class StudyController {
     @PostMapping("/chat/message/translation")
     public ResponseDto<?> translateMessage(@RequestBody TranslationRequestDto translationRequestDto) {
         String message = translationRequestDto.getMessage();
-        return chatService.sendTranslateMessage(message);
+        return chatHandler.sendTranslateMessage(message);
     }
 }

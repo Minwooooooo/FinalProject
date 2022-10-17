@@ -25,7 +25,7 @@ public class ChatRoomController {
         String roomId=chatRoomService.createChatRoom(creatRoomRequestDto,request).getRoomId();
         String roomPw=creatRoomRequestDto.getRoomPw();
         // 퇴장 오류 검증 및 오류 발생시 퇴장처리
-        roomHandler.quitProcess(request);
+        // roomHandler.quitProcess(request);
         // 생성후 자동입장
         return roomHandler.enterRoomHandler(roomId,roomPw,request);
     }
@@ -34,7 +34,7 @@ public class ChatRoomController {
     @GetMapping(value = "/rooms")
     public ResponseDto<?> roomList(HttpServletRequest request){
         // 퇴장 오류 검증 및 오류 발생시 퇴장처리
-        roomHandler.quitProcess(request);
+        // roomHandler.quitProcess(request);
         return ResponseDto.success(chatRoomService.roomList());
 
     }
@@ -43,7 +43,7 @@ public class ChatRoomController {
     @PostMapping(value = "/enter/{roomId}")
     public ResponseDto<?> enterRoom(@PathVariable String roomId, @RequestBody RoomPasswordDto roomPasswordDto, HttpServletRequest request){
         // 퇴장 오류 검증 및 오류 발생시 퇴장처리
-        roomHandler.quitProcess(request);
+        // roomHandler.quitProcess(request);
         return roomHandler.enterRoomHandler(roomId,roomPasswordDto.getPassword(),request);
     }
 

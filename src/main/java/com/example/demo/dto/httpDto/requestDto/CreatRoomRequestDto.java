@@ -11,6 +11,7 @@ import javax.persistence.Id;
 public class CreatRoomRequestDto {
     private String roomName;
     private String category;
+    private String roomImage;
     private long maxEnterMember;
     private boolean lock;
     private String roomPw;
