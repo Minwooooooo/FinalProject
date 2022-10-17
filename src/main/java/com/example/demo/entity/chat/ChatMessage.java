@@ -2,22 +2,43 @@ package com.example.demo.entity.chat;
 
 import lombok.*;
 
-@Getter
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Builder
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Data
 public class ChatMessage {
 
-    // 메시지 타입 : 입장, 퇴장, 채팅
-    public enum MessageType {
-        ENTER, QUIT, TALK, NOTICE, VAN,ROOM_INFO,MANAGER,TEMP_3,TEMP_4,LIST
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    }
+    @Column
+    private String roomId;
 
-    private MessageType type; // 메시지 타입
-    private String roomId; // 방번호
-    private String message; // 메시지
-    private String chatTime;
+    @Column
+    private String roomName;
+
+    @Column
+    private String type;
+
+    @Column
+    private String senderId;
+
+    @Column
+    private String senderName;
+
+    @Column
+    private String message;
+
+    @Column
+    private String etc;
+
+    @Column
+    private Date date;
+
 }

@@ -1,6 +1,6 @@
 package com.example.demo.service.Chat;
 
-import com.example.demo.entity.chat.ChatMessage;
+import com.example.demo.dto.messageDto.responseDto.ChatMessageResponseDto;
 import com.example.demo.entity.room.ChatRoom;
 import com.example.demo.entity.room.RoomNotice;
 import com.example.demo.repository.room.RoomNoticeRepository;
@@ -25,10 +25,9 @@ public class ChatBotService {
     !
      */
     @Transactional
-    public String botRunner(ChatMessage chatMessage){
-        String message=chatMessage.getMessage();
-        System.out.println(message.trim());
-        ChatRoom chatRoom = chatRoomRepository.findById(chatMessage.getRoomId()).get();
+    public String botRunner(ChatMessageResponseDto chatMessageResponseDto){
+        String message= chatMessageResponseDto.getMessage();
+        ChatRoom chatRoom = chatRoomRepository.findById(chatMessageResponseDto.getRoomId()).get();
         String new_message = null;
         if(message.trim().equals("!공지")){
             String get_notice=getNotice(chatRoom);
@@ -51,6 +50,14 @@ public class ChatBotService {
                 notice.get().editNotice(temp_notice);
             }
             new_message="<신규 공지>"+temp_notice;
+        }
+        else if(message.trim().equals("!명령어")){
+            new_message="<명령어>\n" +
+                    "[일반 명령어] :\n"+
+                    " !공지 : 공지조회\n" +
+                    "\n[방장 명령어] :\n"+
+                    " !공지등록 : 공지등록(공지버튼과 동일기능)\n";
+
         }
         else {
             new_message="잘못된 명령어 입니다. 채팅봇 명령어를 보시려면 [!명령어]를 입력해주세요.";
