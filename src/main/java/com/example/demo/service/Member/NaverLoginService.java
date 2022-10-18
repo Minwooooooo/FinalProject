@@ -58,7 +58,7 @@ public class NaverLoginService {
 
         // 기존 가입 여부 확인
         if(!checkExistMember(memberInfo)){
-            System.out.println("신규");
+            //System.out.println("신규");
             // false : 신규 회원
             // 회원가입
             signIn(memberInfo);
@@ -113,10 +113,10 @@ public class NaverLoginService {
     // 유저 기존 가입여부 확인
     public boolean checkExistMember(Map info){
         if(memberRepository.existsByNaverId(info.get("id").toString())){
-            System.out.println("있음");
+            //System.out.println("있음");
             return true;
         }
-        System.out.println("없음");
+        //System.out.println("없음");
         return false;
     }
 

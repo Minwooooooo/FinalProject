@@ -157,7 +157,7 @@ public class ChatTranslateService {
         if (result.equals("en") || result.equals("ko")) {
             return result;
         } else {
-            System.out.println("번역가능한 언어가 아닙니다.");
+            //System.out.println("번역가능한 언어가 아닙니다.");
             return result;
         }
 

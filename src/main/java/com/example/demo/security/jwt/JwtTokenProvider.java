@@ -47,7 +47,7 @@ public class JwtTokenProvider {
 
         // MemberIP확인
         String memberIP=getMemberIP(request);
-        System.out.println(memberIP);
+        //System.out.println(memberIP);
 
         // AccessToken생성
         String accessToken=Jwts.builder()
@@ -57,7 +57,7 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(date+ACCESS_TOKEN_EXPIRE_TIME))
                 .signWith(JWT_KEY,SignatureAlgorithm.HS256)
                 .compact();
-        System.out.println(accessToken);
+        //System.out.println(accessToken);
         // RefreshToken생성
         String refreshToken=Jwts.builder()
                 .setExpiration(new Date(date+Refresh_TOKEN_EXPIRE_TIME))
@@ -199,7 +199,7 @@ public class JwtTokenProvider {
             return returnMsg;
         }
         finally {
-            System.out.println(returnMsg);
+            //System.out.println(returnMsg);
         }
     }
 

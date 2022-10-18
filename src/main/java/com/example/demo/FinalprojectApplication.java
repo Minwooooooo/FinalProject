@@ -20,7 +20,7 @@ public class FinalprojectApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOriginPatterns("localhost:3000")
+						.allowedOriginPatterns("*")
 						.exposedHeaders("*")
 						.allowedMethods("*")
 						.allowedHeaders("*")

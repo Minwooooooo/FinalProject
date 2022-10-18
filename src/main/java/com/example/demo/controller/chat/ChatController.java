@@ -62,9 +62,6 @@ public class ChatController {
         }
         // 접속 테스트
         else if (message.getType().equals(ChatMessageResponseDto.MessageType.PINGPONG)) {
-//            Date date = new Date();
-//            int sec = date.getSeconds();
-//            System.out.println(sec+" : "+message.getType());
             String roomId=message.getRoomId();
             roomHandler.pingPongCheck(memberId,roomId);
         }

@@ -38,7 +38,7 @@ public class TimerService {
         // 기존 타이머 여부 확인
         // 생성
         if(timerRepository.findByRoomIdAndMember(timerRequestDto.getRoomId(),member).isEmpty()){
-            System.out.println("신규생성");
+            //System.out.println("신규생성");
             StudyTimer studyTimer = StudyTimer.builder()
                     .member(member)
                     .roomId(timerRequestDto.getRoomId())
@@ -50,7 +50,7 @@ public class TimerService {
             return ResponseDto.success("타이머 저장 완료");
         }
         else {
-            System.out.println("수정");
+            //System.out.println("수정");
             // 수정
             StudyTimer studyTimer = timerRepository.findByRoomIdAndMember(timerRequestDto.getRoomId(), member).get();
             String beforeTime = studyTimer.getTime();

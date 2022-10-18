@@ -239,7 +239,7 @@ public class RoomHandler {
         String token= jwtTokenProvider.getToken(request);
         Member member=memberRepository.findById(jwtTokenProvider.tempClaim(token).getSubject())
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
-        System.out.println("QUIT_PROCESS : "+member.getMemberName());
+        //System.out.println("QUIT_PROCESS : "+member.getMemberName());
 
         Optional<RoomDetail> roomDetail=roomDetailRepository.findByEnterMembers(member);
         if(roomDetail.isPresent()){
@@ -336,10 +336,8 @@ public class RoomHandler {
                 List<Member> temp_EnterMembers=temp_RoomDetail.getEnterMembers();
                 List<Member> quitMember=new ArrayList<>();
                 for (Member temp_enterMember : temp_EnterMembers) {
-                    System.out.println(temp_enterMember + " 체크 시작");
                     Date temp_lastPing = temp_enterMember.getLastPing();
                     if (temp_lastPing != null && date.getTime() - temp_lastPing.getTime() >= 5000) {
-                        System.out.println("5000이상 차이");
                         quitMember.add(temp_enterMember);
                     }
                 }

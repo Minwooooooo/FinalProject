@@ -183,13 +183,13 @@ public class ChatHandler {
         JsonObject temp_response = (JsonObject) obj;
         try{
             JsonElement responseElement=temp_response.get("message");
-            System.out.println(responseElement);
+            //System.out.println(responseElement);
             JsonObject responseObject=(JsonObject) ((JsonObject) responseElement).get("result");
-            System.out.println(responseObject);
+            //System.out.println(responseObject);
             TranslationResponseDto translationResponseDto=TranslationResponseDto.builder()
                     .translatedText(responseObject.get("translatedText").toString())
                     .build();
-            System.out.println(responseObject.get("translatedText").toString());
+            //System.out.println(responseObject.get("translatedText").toString());
             return ResponseDto.success(translationResponseDto);
         }catch (Exception e){
             return ResponseDto.fail("Error",e.getMessage());

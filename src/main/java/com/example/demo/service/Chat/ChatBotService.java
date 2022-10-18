@@ -37,7 +37,6 @@ public class ChatBotService {
         else if(message.length()>4&&message.substring(0,5).equals("!공지등록")){
             Optional<RoomNotice> notice= roomNoticeRepository.findByChatRoom(chatRoom);
             String temp_notice=registNotice(message);
-            System.out.println(chatRoom.getRoomId());
 
             if(notice.isEmpty()){
             RoomNotice newRoomNotice = RoomNotice.builder()

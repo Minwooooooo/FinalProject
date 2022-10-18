@@ -32,7 +32,7 @@ public class ScriptService {
         if(scriptList.isEmpty()){
             return ResponseDto.fail("Null_SCRIPT",type+"인 script가 존재하지 않습니다.");
         }
-        System.out.println("시작 "+scriptList.size());
+        //System.out.println("시작 "+scriptList.size());
 
 
 
