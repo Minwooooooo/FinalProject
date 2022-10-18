@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/login/kakao").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/admin/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/chat/message/translation").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/auth/**").authenticated()
                 .antMatchers(HttpMethod.OPTIONS, "/chat/**").authenticated()
                 .anyRequest().permitAll()
