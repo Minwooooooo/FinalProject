@@ -54,8 +54,11 @@ public class RoomHandler {
                 .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
 
         // 방조회
-        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
-                .orElseThrow(()->new RuntimeException("존재하지않는 방입니다."));
+        Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findById(roomId);
+                if(optionalChatRoom.isEmpty()){
+                    return ResponseDto.fail("Not_Exist_ROOM","존재하지않는 방입니다.");
+                }
+                ChatRoom chatRoom = optionalChatRoom.get();
         RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
                 .orElseThrow();
         if(chatRoom.getStatusChecker()==2){
@@ -81,7 +84,7 @@ public class RoomHandler {
         }catch (NullPointerException e){
         }
         if(blackMembers!=null&&blackMembers.contains(member)){
-            return ResponseDto.fail("Bannde_Enter","입장이 금지되었습니다.");
+            return ResponseDto.fail("Banned_Enter","입장이 금지되었습니다.");
         }
         try {
 
@@ -346,11 +349,11 @@ public class RoomHandler {
                             .type(1)
                             .sender("알림")
                             .image("")
-                            .msg(quitMember.get(i).getMemberName()+"님 빠잉")
+                            .msg(quitMember.get(j).getMemberName()+"님 빠잉")
                             .build();
                     messageSendingOperations.convertAndSend("/sub/chat/room/"+chatRoom.getRoomId(),temp_msg);
-                    quitMember.get(i).setlastPing(null);
-                    autoChangeRoomManager(roomId, quitMember.get(i), chatRoom, roomDetail);
+                    quitMember.get(j).setlastPing(null);
+                    autoChangeRoomManager(roomId, quitMember.get(j), chatRoom, roomDetail);
                 }
                 chatHandler.enterMembers(chatRoom.getRoomId());
             }
