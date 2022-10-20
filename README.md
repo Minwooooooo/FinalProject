@@ -9,6 +9,7 @@
 </div>
 
 #### https://engfluencer.co.kr
+#### 개발자 Discord : https://discord.com/invite/dG8WHNwX
 
 
 ## 메인기능
