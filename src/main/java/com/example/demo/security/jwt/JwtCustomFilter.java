@@ -24,6 +24,7 @@ public class JwtCustomFilter extends OncePerRequestFilter {
     // jwt토큰을 가져와 유효성 검사 진행후 유효하다면 토큰에 담긴 정보(유저 권한 등)를 SecurityContext에 저장
 
     public static String AUTHORIZATION_HEADER = "Authorization";
+    public static String REFRESHTOKEN_HEADER = "RefreshToken";
     public static String TOKEN_TYPE = "Bearer ";
     private static final Logger logger= LoggerFactory.getLogger(JwtCustomFilter.class);
     private final JwtTokenProvider jwtTokenProvider;
@@ -56,8 +57,6 @@ public class JwtCustomFilter extends OncePerRequestFilter {
             // 저장 후 SecurityContextHolder에 담긴 권한
             Authentication temp_auth2=SecurityContextHolder.getContext().getAuthentication();
 
-            System.out.println(temp_auth1+" --필터적용-> "+temp_auth2);
-
             logger.debug("SecurityContextHolder에 '{}' 인증정보를 저장했습니다, uri: {}",userAuth.getName(),request.getRequestURI());
         }
         else {
@@ -71,7 +70,7 @@ public class JwtCustomFilter extends OncePerRequestFilter {
         String accessToken = request.getHeader(AUTHORIZATION_HEADER);
         //System.out.println("Filter에서 받은 토큰 : "+accessToken);
         if (StringUtils.hasText(accessToken) && accessToken.startsWith(TOKEN_TYPE)) {
-            return accessToken.substring(7);
+            return accessToken;
         }
         return null;
     }

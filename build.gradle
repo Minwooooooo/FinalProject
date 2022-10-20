@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
 	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
@@ -51,6 +52,14 @@ dependencies {
 	compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+	implementation group: 'org.apache.poi', name: 'poi-scratchpad', version: '4.1.2'
+	implementation 'org.apache.poi:poi-ooxml:4.1.2'
+	implementation 'org.apache.poi:poi:4.1.2'
+
+	implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.290')
+	implementation 'com.amazonaws:aws-java-sdk-s3'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
 }
 
 tasks.named('test') {

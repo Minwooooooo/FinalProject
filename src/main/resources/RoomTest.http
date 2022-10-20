@@ -6,7 +6,7 @@ accept: */*
 
 {
   "roomName" : "보미님 화이팅",
-  "category" : "생활영어" ,
+  "script" : "생활영어" ,
   "memberCount" : "6",
   "lock": false,
   "roomPw" : ""
@@ -19,7 +19,7 @@ accept: */*
 
 {
   "roomName" : "스터티방",
-  "category" : "생활영어" ,
+  "script" : "생활영어" ,
   "memberCount" : "6",
   "lock": false,
   "roomPw" : ""
@@ -46,3 +46,12 @@ accept: */*
   "studyTime": "하잉"
 }
 
+###
+POST http://localhost:8080/auth/chat/enter/b1fc9dbe-f253-408b-8974-f4e6767c9aaf
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyNDQyMTA5NjQ2IiwibmFtZSI6IuygleuvvOyasCIsImF1dGgiOiJST0xFX1VTRVIifQ.w52wo6JO6UjvGsqRVb6D0js6ljm-qHBN9r6IG-RoCQs
+Content-Type: application/json
+accept: */*
+
+{
+  "password": "하잉"
+}

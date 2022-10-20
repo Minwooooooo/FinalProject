@@ -17,7 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  * Web Security 설정(debug = true)
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = false)
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandlerException accessDeniedHandlerException;
@@ -46,8 +46,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
-                .anyRequest().permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/login/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/admin/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/chat/message/translation").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/auth/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/chat/**").permitAll()
+                .anyRequest().authenticated()
 
             .and()
                 .apply(new JwtSecurityConfiguration(jwtTokenProvider));
