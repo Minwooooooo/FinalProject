@@ -20,8 +20,8 @@ public class FinalprojectApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOriginPatterns("*")
-						.exposedHeaders("*")
+						.allowedOrigins("https://engfluencer.co.kr","https://www.engfluencer.co.kr","http://www.localhost:3000","http://localhost:3000")
+						.exposedHeaders("Authorization")
 						.allowedMethods("*")
 						.allowedHeaders("*")
 						.allowCredentials(true)

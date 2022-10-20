@@ -66,11 +66,11 @@ public class RoomHandler {
         }
 
         //비밀번호 확인
-        if(chatRoom.isLockChecker()){
-            if (!chatRoom.getRoomPw().equals(roomPw)){
-                return ResponseDto.fail("Incorrect_Password","틀린 비밀번호입니다.");
-            }
-        }
+//        if(chatRoom.isLockChecker()){
+//            if (!chatRoom.getRoomPw().equals(roomPw)){
+//                return ResponseDto.fail("Incorrect_Password","틀린 비밀번호입니다.");
+//            }
+//        }
 
         // 권한 확인(인원수)
         if(chatRoom.getMaxEnterMember()< chatRoom.getMemberCount()+1){
@@ -413,5 +413,26 @@ public class RoomHandler {
                 .date(date)
                 .build();
         chatMessageRepository.save(chatMessage);
+    }
+
+    public ResponseDto<?> roomPasswordChecker(String roomId, String password, HttpServletRequest request) {
+        // 접속 멤버 조회
+        String token= jwtTokenProvider.getToken(request);
+        Member member=memberRepository.findById(jwtTokenProvider.tempClaim(token).getSubject())
+                .orElseThrow(()->new RuntimeException("존재하지 않는 ID입니다."));
+
+        // 방조회
+        Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findById(roomId);
+        if(optionalChatRoom.isEmpty()){
+            return ResponseDto.fail("Not_Exist_ROOM","존재하지않는 방입니다.");
+        }
+        ChatRoom chatRoom = optionalChatRoom.get();
+
+        if(chatRoom.isLockChecker()){
+            if (!chatRoom.getRoomPw().equals(password)){
+                return ResponseDto.fail("Incorrect_Password","틀린 비밀번호입니다.");
+            }
+        }
+        return ResponseDto.success(null);
     }
 }

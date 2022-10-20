@@ -43,11 +43,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(accessDeniedHandlerException)
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
-                .anyRequest().permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/login/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/admin/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/chat/message/translation").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/auth/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/chat/**").permitAll()
+                .anyRequest().authenticated()
 
             .and()
                 .apply(new JwtSecurityConfiguration(jwtTokenProvider));

@@ -53,4 +53,11 @@ public class ChatRoomController {
         return roomHandler.quitRoomHandler(roomId,request);
 
     }
+
+    @PostMapping(value = "/check/{roomId}")
+    public ResponseDto<?> checkRoomPw(@PathVariable String roomId, @RequestBody RoomPasswordDto roomPasswordDto, HttpServletRequest request){
+        // 퇴장 오류 검증 및 오류 발생시 퇴장처리
+        // roomHandler.quitProcess(request);
+        return roomHandler.roomPasswordChecker(roomId,roomPasswordDto.getPassword(),request);
+    }
 }
