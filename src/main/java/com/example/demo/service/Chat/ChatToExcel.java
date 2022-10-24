@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,6 @@ public class ChatToExcel {
     AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.credentials.bucket-name}")
     String S3_BUCKET;
-    private final MemberRepository memberRepository;
     private final ChatMessageRepository chatMessageRepository;
 
     public void logSave(String roomId){
@@ -61,6 +61,7 @@ public class ChatToExcel {
             }
 
             int rowIndex=1;
+            List<ChatMessage> vanMessages=new ArrayList<>();
             for (int i = 0; i < chatMessageList.size(); i++) {
                 Row row = sheet.createRow(rowIndex++);
                 row.createCell(0).setCellValue(chatMessageList.get(i).getRoomId());
@@ -71,11 +72,14 @@ public class ChatToExcel {
                 row.createCell(5).setCellValue(chatMessageList.get(i).getMessage());
                 row.createCell(6).setCellValue(chatMessageList.get(i).getEtc());
                 row.createCell(7).setCellValue(chatMessageList.get(i).getDate().toString());
+                if(chatMessageList.get(i).getType().equals("REPORT")){
+                    vanMessages.add(chatMessageList.get(i));
+                }
             }
-
             workbook.write(outputStream);
             upload(new ByteArrayInputStream(outputStream.toByteArray()),fileName);
-            chatMessageRepository.deleteAll(chatMessageList);
+            chatMessageList.removeAll(vanMessages);
+            // chatMessageRepository.deleteAll(chatMessageList);
         }
         catch (IOException e) {
             throw new RuntimeException("실패 : "+e.getMessage());

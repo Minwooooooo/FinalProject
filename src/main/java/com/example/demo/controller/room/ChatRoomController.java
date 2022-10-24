@@ -35,6 +35,7 @@ public class ChatRoomController {
     public ResponseDto<?> roomList(HttpServletRequest request){
         // 퇴장 오류 검증 및 오류 발생시 퇴장처리
         // roomHandler.quitProcess(request);
+        roomHandler.roomCleaner();
         return ResponseDto.success(chatRoomService.roomList());
 
     }

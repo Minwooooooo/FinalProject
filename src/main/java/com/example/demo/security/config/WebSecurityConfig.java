@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/chat/message/translation").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/auth/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/chat/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
 
             .and()
                 .apply(new JwtSecurityConfiguration(jwtTokenProvider));
