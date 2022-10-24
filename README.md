@@ -10,6 +10,7 @@
 </div>
 
 #### https://engfluencer.co.kr
+#### Notion : https://engfluencer.notion.site/EngFluencer-42d1f7351cbd4d47a4137ab50e45b459
 #### 개발자 Discord : https://discord.com/invite/dG8WHNwX
 
 ## 메인기능
