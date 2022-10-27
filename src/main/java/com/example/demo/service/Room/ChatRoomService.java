@@ -50,14 +50,14 @@ public class ChatRoomService {
     // 방 목록
     public List<RoomListResponseDto> roomList() {
         List<RoomListResponseDto> responseDtos = new ArrayList<>();
-        List<ChatRoom> temp_list = chatRoomRepository.findAllByStatusCheckerOrStatusChecker(0, 1);
+        List<ChatRoom> temp_list = chatRoomRepository.findAllByStatusChecker(1);
         for (int i = 0; i < temp_list.size(); i++) {
             RoomListResponseDto temp_room= RoomListResponseDto.builder()
                     .roomId(temp_list.get(i).getRoomId())
                     .roomName(temp_list.get(i).getRoomName())
                     .roomImage(temp_list.get(i).getRoomImage())
                     .lock(temp_list.get(i).isLockChecker())
-                    .category(temp_list.get(i).getCategory().toString())
+                    .category(temp_list.get(i).getCategory())
                     .maxCount(temp_list.get(i).getMaxEnterMember())
                     .nowCount(temp_list.get(i).getMemberCount())
                     .build();

@@ -154,7 +154,7 @@ public class RoomHandler {
         Optional<RoomNotice> roomNotice = roomNoticeRepository.findByChatRoom(chatRoom);
 
         //방이 비활성화 상태(2)이고 인원수가 0인 경우
-        if (chatRoom.getStatusChecker() == 2 && chatRoom.getMemberCount() == 0) {
+        if (chatRoom.getStatusChecker() != 0 && chatRoom.getMemberCount() == 0) {
             // 채팅 S3에 저장 후 삭제
             chatToExcel.logSave(roomId);
 
@@ -165,11 +165,26 @@ public class RoomHandler {
             }
             roomNotice.ifPresent(roomNoticeRepository::delete);
 
-            roomDetailRepository.delete(roomDetail);
-            chatRoomRepository.delete(chatRoom);
+            // roomDetailRepository.delete(roomDetail);
+            // chatRoomRepository.delete(chatRoom);
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public void roomCleaner(){
+        List<ChatRoom> chatRooms=chatRoomRepository.findAll();
+        List<String> roomIds=new ArrayList<>();
+        for (ChatRoom chatRoom : chatRooms) {
+            RoomDetail roomDetail = roomDetailRepository.findByChatRoom(chatRoom)
+                    .orElseThrow();
+            chatRoom.editMember((long)roomDetail.getEnterMembers().size());
+            roomIds.add(chatRoom.getRoomId());
+        }
+        for (String roomId : roomIds) {
+            deleteRoomHandler(roomId);
+        }
     }
 
 
@@ -349,7 +364,7 @@ public class RoomHandler {
                             .image("")
                             .msg(quitMember.get(j).getMemberName()+"님 빠잉")
                             .build();
-                    messageSendingOperations.convertAndSend("/sub/chat/room/"+chatRoom.getRoomId(),temp_msg);
+                    messageSendingOperations.convertAndSend("/sub/chat/room/"+temp_RoomDetail.getChatRoom().getRoomId(),temp_msg);
                     quitMember.get(j).setlastPing(null);
                     autoChangeRoomManager(roomId, quitMember.get(j), chatRoom, roomDetail);
                 }
